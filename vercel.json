@@ -3,7 +3,7 @@
       { "source": "/api/(.*)", "destination": "/api/$1" }
     ],
     "functions": {
-      "api/**/*.js": {
+      "api/**/*.ts": {
         "memory": 1024,
         "maxDuration": 10
       }
