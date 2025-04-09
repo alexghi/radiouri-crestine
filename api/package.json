@@ -1,0 +1,9 @@
+{
+    "name": "api",
+    "version": "1.0.0",
+    "private": true,
+    "type": "module",
+    "dependencies": {
+        "@vercel/node": "^2.15.10"
+    }
+}

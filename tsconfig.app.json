@@ -24,5 +24,6 @@
     "allowJs": true,
     "forceConsistentCasingInFileNames": true,
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["api", "api/**/*"]  // Explicitly exclude the API directory
 }
