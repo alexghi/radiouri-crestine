@@ -1,5 +1,5 @@
 // Google Analytics 4 implementation
-export const GA_TRACKING_ID = 'G-DJSDBYJ2RB'; // Replace with your GA4 measurement ID
+export const GA_TRACKING_ID = import.meta.env.VITE_GA_TRACKING_ID
 
 // Initialize GA4
 export const initGA = () => {
