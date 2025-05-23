@@ -8,12 +8,6 @@ const MAILCHIMP_API_KEY = get(`MAILCHIMP_API_KEY`).asString();
 const MAILCHIMP_LIST_ID = get(`MAILCHIMP_LIST_ID`).asString();
 const MAILCHIMP_DC = get(`MAILCHIMP_DC`).asString();
 const PROJECT_ID = get(`PROJECT_ID`).asString();
-console.log({
-  RECAPTCHA_KEY,
-  MAILCHIMP_API_KEY,
-  MAILCHIMP_LIST_ID,
-  MAILCHIMP_DC,
-});
 
 async function createAssessment({
   projectID = PROJECT_ID,
@@ -21,8 +15,7 @@ async function createAssessment({
   token = "action-token",
   recaptchaAction = "action-name",
 }) {
-  // Create the reCAPTCHA client.
-  // TODO: Cache the client generation code (recommended) or call client.close() before exiting the method.
+  console.log("Creating assessment...");
   const client = new RecaptchaEnterpriseServiceClient();
   const projectPath = client.projectPath(projectID);
 
@@ -110,7 +103,12 @@ async function addToMailchimp(
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     console.log("Function started with method:", req.method);
-
+    console.log({
+      RECAPTCHA_KEY,
+      MAILCHIMP_API_KEY,
+      MAILCHIMP_LIST_ID,
+      MAILCHIMP_DC,
+    });
     if (req.method !== "POST") {
       return res.status(405).json({ error: "Method not allowed" });
     }
