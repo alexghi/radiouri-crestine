@@ -8,14 +8,37 @@ const MAILCHIMP_API_KEY = get(`MAILCHIMP_API_KEY`).asString();
 const MAILCHIMP_LIST_ID = get(`MAILCHIMP_LIST_ID`).asString();
 const MAILCHIMP_DC = get(`MAILCHIMP_DC`).asString();
 const GOOGLE_CLOUD_PROJECT_ID = get(`GOOGLE_CLOUD_PROJECT_ID`).asString();
+const GOOGLE_APPLICATION_CREDENTIALS_JSON = get(
+  `GOOGLE_APPLICATION_CREDENTIALS_JSON`,
+).asString();
 
 async function createAssessment({
   token = "action-token",
   recaptchaAction = "action-name",
 }) {
   console.log("Creating assessment...");
-  const client = new RecaptchaEnterpriseServiceClient();
-  const projectPath = client.projectPath(GOOGLE_CLOUD_PROJECT_ID);
+
+  // Parse the JSON string and handle potential parsing errors
+  let credentials;
+  try {
+    credentials = JSON.parse(GOOGLE_APPLICATION_CREDENTIALS_JSON);
+  } catch (error) {
+    console.error("Failed to parse Google credentials JSON:", error);
+    throw new Error("Invalid Google Cloud credentials format");
+  }
+
+  const projectId = GOOGLE_CLOUD_PROJECT_ID;
+
+  const client = new RecaptchaEnterpriseServiceClient({
+    credentials: {
+      ...credentials,
+      // Handle newlines in private key properly
+      private_key: credentials.private_key?.replace(/\\n/g, "\n"),
+    },
+    projectId: projectId,
+  });
+
+  const projectPath = client.projectPath(projectId);
 
   // Build the assessment request.
   const request = {
@@ -31,20 +54,20 @@ async function createAssessment({
   const [response] = await client.createAssessment(request);
 
   // Check if the token is valid.
-  if (!response.tokenProperties.valid) {
+  if (!response.tokenProperties?.valid) {
     console.log(
-      `The CreateAssessment call failed because the token was: ${response.tokenProperties.invalidReason}`,
+      `The CreateAssessment call failed because the token was: ${response.tokenProperties?.invalidReason}`,
     );
     return null;
   }
 
   if (response.tokenProperties.action === recaptchaAction) {
-    console.log(`The reCAPTCHA score is: ${response.riskAnalysis.score}`);
-    response.riskAnalysis.reasons.forEach((reason) => {
+    console.log(`The reCAPTCHA score is: ${response.riskAnalysis?.score}`);
+    response.riskAnalysis?.reasons?.forEach((reason) => {
       console.log(reason);
     });
 
-    return response.riskAnalysis.score;
+    return response.riskAnalysis?.score;
   } else {
     console.log(
       "The action attribute in your reCAPTCHA tag does not match the action you are expecting to score",
@@ -101,12 +124,7 @@ async function addToMailchimp(
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     console.log("Function started with method:", req.method);
-    console.log({
-      RECAPTCHA_KEY,
-      MAILCHIMP_API_KEY,
-      MAILCHIMP_LIST_ID,
-      MAILCHIMP_DC,
-    });
+
     if (req.method !== "POST") {
       return res.status(405).json({ error: "Method not allowed" });
     }
@@ -119,6 +137,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         return res.status(400).json({
           success: false,
           error: "reCAPTCHA token is required",
+        });
+      }
+
+      if (!email) {
+        return res.status(400).json({
+          success: false,
+          error: "Email is required",
         });
       }
 
