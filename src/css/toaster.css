@@ -1,0 +1,174 @@
+/* Custom Sonner Toast Styles */
+:root {
+    --sonner-toast-width: 468px;
+    --sonner-toast-gap: 8px;
+}
+
+/* Position toaster in top-right */
+.sonner-toaster {
+    position: fixed !important;
+    top: 20px !important;
+    right: 20px !important;
+    z-index: 9999 !important;
+}
+
+/* Custom toast styling to override defaults */
+.sonner-toaster [data-sonner-toast] {
+    border-radius: 8px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    border: none !important;
+    padding: 16px !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    min-height: 48px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    max-width: 468px !important;
+}
+
+/* Success toast - Purple theme */
+.sonner-toaster [data-sonner-toast][data-type="success"] {
+    background: #9333ea !important;
+    color: #ffffff !important;
+    border: 1px solid #9333ea !important;
+}
+
+.sonner-toaster [data-sonner-toast][data-type="success"] [data-icon] {
+    color: #ffffff !important;
+}
+
+/* Error toast - Light pink theme with dark text */
+.sonner-toaster [data-sonner-toast][data-type="error"] {
+    background: #fecaca !important;
+    color: #7f1d1d !important;
+    border: 1px solid #f87171 !important;
+}
+
+.sonner-toaster [data-sonner-toast][data-type="error"] [data-icon] {
+    color: #dc2626 !important;
+}
+
+/* Default/info toast - Dark purple theme */
+.sonner-toaster [data-sonner-toast][data-type="info"],
+.sonner-toaster [data-sonner-toast]:not([data-type]) {
+    background: #581c87 !important;
+    color: #ffffff !important;
+    border: 1px solid #7c3aed !important;
+}
+
+.sonner-toaster [data-sonner-toast][data-type="info"] [data-icon],
+.sonner-toaster [data-sonner-toast]:not([data-type]) [data-icon] {
+    color: #ffffff !important;
+}
+
+/* Warning toast - keeping original orange but with better contrast */
+.sonner-toaster [data-sonner-toast][data-type="warning"] {
+    background: #f59e0b !important;
+    color: #ffffff !important;
+    border: 1px solid #f59e0b !important;
+}
+
+.sonner-toaster [data-sonner-toast][data-type="warning"] [data-icon] {
+    color: #ffffff !important;
+}
+
+/* Loading toast - Dark purple theme */
+.sonner-toaster [data-sonner-toast][data-type="loading"] {
+    background: #581c87 !important;
+    color: #ffffff !important;
+    border: 1px solid #7c3aed !important;
+}
+
+.sonner-toaster [data-sonner-toast][data-type="loading"] [data-icon] {
+    color: #ffffff !important;
+}
+
+/* Close button styling */
+.sonner-toaster [data-sonner-toast] [data-close-button] {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: inherit !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 4px !important;
+    width: 20px !important;
+    height: 20px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 12px !important;
+}
+
+.sonner-toaster [data-sonner-toast] [data-close-button]:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Special styling for error toast close button */
+.sonner-toaster [data-sonner-toast][data-type="error"] [data-close-button] {
+    background: rgba(127, 29, 29, 0.1) !important;
+    color: #7f1d1d !important;
+    border: 1px solid rgba(127, 29, 29, 0.2) !important;
+}
+
+.sonner-toaster [data-sonner-toast][data-type="error"] [data-close-button]:hover {
+    background: rgba(127, 29, 29, 0.2) !important;
+}
+
+/* Action buttons styling */
+.sonner-toaster [data-sonner-toast] [data-button] {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: inherit !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 6px !important;
+    padding: 6px 12px !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    transition: all 0.2s ease !important;
+}
+
+.sonner-toaster [data-sonner-toast] [data-button]:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Responsive design */
+@media (max-width: 640px) {
+    .sonner-toaster {
+        left: 16px !important;
+        right: 16px !important;
+        top: 16px !important;
+    }
+
+    .sonner-toaster [data-sonner-toast] {
+        max-width: calc(100vw - 32px) !important;
+    }
+}
+
+/* Animation improvements */
+.sonner-toaster [data-sonner-toast] {
+    animation: sonner-slide-in 0.3s ease-out forwards !important;
+}
+
+@keyframes sonner-slide-in {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.sonner-toaster [data-sonner-toast][data-removed="true"] {
+    animation: sonner-slide-out 0.2s ease-in forwards !important;
+}
+
+@keyframes sonner-slide-out {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}

@@ -9,6 +9,7 @@ Agregator Radiouri Crestine
 * **`npm run lint`** : Rulează ESLint pe fișiere `.ts`/`.tsx`, fără avertismente.
 * **`npm run preview`** : Vizualizează aplicația construită local, ca în producție.
 * **`npm run deploy`** : Publică aplicația pe Vercel 
+* **`npm run deploy:dev:functions`** : Ruleaza aplicatia in mod dev pe Vercel, dar cu functiile serverless.
 * **`npm run deploy:prod`** : Publică aplicația pe Vercel în producție (`--prod`).
 
 #### api - serverless functions

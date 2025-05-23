@@ -34,7 +34,7 @@ export function FloatingPlayer({
 
   if (isMinimized) {
     return (
-      <div className="fixed bottom-4 right-4 bg-spotify-base backdrop-blur-lg rounded-full shadow-2xl flex items-center overflow-hidden group hover:bg-spotify-hover transition-colors">
+      <div className="fixed bottom-4 right-4 bg-spotify-base backdrop-blur-lg rounded-full shadow-2xl flex items-center overflow-hidden group hover:bg-spotify-hover transition-colors z-[9999]">
         <img
           src={station.now_playing?.song?.thumbnail_url || station.thumbnail_url || "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=800"}
           alt={station.title}
@@ -69,7 +69,7 @@ export function FloatingPlayer({
 
   return (
     <div 
-      className="fixed bottom-4 right-4 bg-spotify-base backdrop-blur-lg rounded-2xl shadow-2xl overflow-hidden"
+      className="fixed bottom-4 right-4 bg-spotify-base backdrop-blur-lg rounded-2xl shadow-2xl overflow-hidden z-[9999]"
       style={{ width: 'min(60vw, 450px)', maxHeight: '80vh' }}
     >
       <div className="flex flex-col h-full max-h-[700px]">
