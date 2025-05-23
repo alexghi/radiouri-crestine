@@ -7,24 +7,22 @@ const RECAPTCHA_KEY = get(`RECAPTCHA_KEY`).asString();
 const MAILCHIMP_API_KEY = get(`MAILCHIMP_API_KEY`).asString();
 const MAILCHIMP_LIST_ID = get(`MAILCHIMP_LIST_ID`).asString();
 const MAILCHIMP_DC = get(`MAILCHIMP_DC`).asString();
-const PROJECT_ID = get(`PROJECT_ID`).asString();
+const GOOGLE_CLOUD_PROJECT_ID = get(`GOOGLE_CLOUD_PROJECT_ID`).asString();
 
 async function createAssessment({
-  projectID = PROJECT_ID,
-  recaptchaKey = RECAPTCHA_KEY,
   token = "action-token",
   recaptchaAction = "action-name",
 }) {
   console.log("Creating assessment...");
   const client = new RecaptchaEnterpriseServiceClient();
-  const projectPath = client.projectPath(projectID);
+  const projectPath = client.projectPath(GOOGLE_CLOUD_PROJECT_ID);
 
   // Build the assessment request.
   const request = {
     assessment: {
       event: {
         token: token,
-        siteKey: recaptchaKey,
+        siteKey: RECAPTCHA_KEY,
       },
     },
     parent: projectPath,
