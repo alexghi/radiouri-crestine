@@ -4,6 +4,8 @@ import { fetchExchange } from 'urql';
 import { RadioPlayer } from './components/RadioPlayer';
 import { Footer } from './components/Footer';
 import { Toaster } from 'sonner';
+import { useEffect } from 'react';
+import { initGA, pageview } from './lib/analytics.ts';
 
 const client = createClient({
   url: 'https://graphql.radio-crestin.com/v1/graphql',
@@ -18,6 +20,12 @@ const client = createClient({
 });
 
 function App() {
+  // Initialize Google Analytics
+  useEffect(() => {
+    initGA();
+    pageview(window.location.pathname + window.location.search);
+  }, []);
+
   return (
     <Provider value={client}>
       <RadioPlayer />

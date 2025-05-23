@@ -7,6 +7,7 @@ import { Mail } from 'lucide-react';
 import * as yup from 'yup';
 import { toast } from 'sonner';
 import { newsletterValidationSchema } from './utils/validators.ts';
+import { event } from '../lib/analytics.ts';
 
 const NewsletterForm = () => {
   const [email, setEmail] = useState('');
@@ -75,6 +76,12 @@ const NewsletterForm = () => {
           email: email,
           action: 'subscribe_newsletter',
         }),
+      });
+
+      event({
+        action: 'subscribe_newsletter',
+        category: 'Newsletter',
+        label: email,
       });
 
       const data = await response.json();
