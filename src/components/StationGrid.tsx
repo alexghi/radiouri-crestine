@@ -36,7 +36,7 @@ export function StationGrid({ stations, onSelectStation, selectedStation }: Stat
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-white mb-2">Radio Creștin Online</h1>
+          <h1 className="text-3xl font-bold text-white mb-2">Radiouri Creștine Online</h1>
           <p className="text-white/70">Ascultă muzică creștină și adaugă la favorite stațiile preferate</p>
         </div>
         <div className="relative w-full sm:w-72">
