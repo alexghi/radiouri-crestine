@@ -6,7 +6,15 @@ import { LoadingDisplay } from './LoadingDisplay';
 import { StationGrid } from './StationGrid';
 import { FloatingPlayer } from './FloatingPlayer';
 import { useAudioPlayer } from '../hooks/useAudioPlayer';
-import { event } from '../lib/analytics';
+import { 
+  trackStationSelect, 
+  trackStationChange, 
+  trackStationPlay, 
+  trackStationPause,
+  trackPlayerMinimize,
+  trackPlayerClose,
+  trackVolumeChange
+} from '../lib/analytics';
 
 const GET_STATIONS = `
   query GetStations {
@@ -55,17 +63,13 @@ export function RadioPlayer() {
     setVolume,
     togglePlay,
     setAudioError
-  } = useAudioPlayer(selectedStation);
+  } = useAudioPlayer(selectedStation || undefined);
 
   const handleStationSelect = (station: Station) => {
     setSelectedStation(station);
     setIsMinimized(false);
-    // Track station selection
-    event({
-      action: 'select_station',
-      category: 'Station',
-      label: station.title,
-    });
+    // Track station selection with specific function
+    trackStationSelect(station.title, station.id);
   };
 
   const handleChangeStation = (direction: 'next' | 'prev') => {
@@ -84,23 +88,44 @@ export function RadioPlayer() {
       ? (currentIndex + 1) % stations.length
       : (currentIndex - 1 + stations.length) % stations.length;
     
-    setSelectedStation(stations[newIndex]);
-    // Track station change
-    event({
-      action: `change_station_${direction}`,
-      category: 'Station',
-      label: stations[newIndex].title,
-    });
+    const newStation = stations[newIndex];
+    setSelectedStation(newStation);
+    // Track station change with specific function
+    trackStationChange(direction, newStation.title, newStation.id);
   };
 
-  // Track play/pause events
+  const handleVolumeChange = (newVolume: number) => {
+    setVolume(newVolume);
+    // Track volume changes (throttled to avoid too many events)
+    const throttledTrackVolume = (() => {
+      let timeout: NodeJS.Timeout | null = null;
+      return (vol: number) => {
+        if (timeout) clearTimeout(timeout);
+        timeout = setTimeout(() => trackVolumeChange(vol), 500);
+      };
+    })();
+    throttledTrackVolume(newVolume);
+  };
+
+  const handleToggleMinimize = () => {
+    const newMinimizedState = !isMinimized;
+    setIsMinimized(newMinimizedState);
+    trackPlayerMinimize(newMinimizedState);
+  };
+
+  const handleClosePlayer = () => {
+    setSelectedStation(null);
+    trackPlayerClose();
+  };
+
+  // Track play/pause events with specific functions
   useEffect(() => {
     if (selectedStation) {
-      event({
-        action: isPlaying ? 'play_station' : 'pause_station',
-        category: 'Playback',
-        label: selectedStation.title,
-      });
+      if (isPlaying) {
+        trackStationPlay(selectedStation.title, selectedStation.id);
+      } else {
+        trackStationPause(selectedStation.title, selectedStation.id);
+      }
     }
   }, [isPlaying, selectedStation]);
 
@@ -137,9 +162,9 @@ export function RadioPlayer() {
           isMinimized={isMinimized}
           onTogglePlay={togglePlay}
           onChangeStation={handleChangeStation}
-          onVolumeChange={setVolume}
-          onToggleMinimize={() => setIsMinimized(!isMinimized)}
-          onClose={() => setSelectedStation(null)}
+          onVolumeChange={handleVolumeChange}
+          onToggleMinimize={handleToggleMinimize}
+          onClose={handleClosePlayer}
         />
       )}
 

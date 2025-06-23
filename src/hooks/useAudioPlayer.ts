@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Station } from '../types';
+import { trackAudioError } from '../lib/analytics';
 
 export function useAudioPlayer(currentStation: Station | undefined) {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -15,14 +16,18 @@ export function useAudioPlayer(currentStation: Station | undefined) {
     const newSource = currentStation.proxy_stream_url || currentStation.stream_url;
 
     if (!newSource) {
-      setAudioError('No audio source available for this station');
+      const errorMessage = 'No audio source available for this station';
+      setAudioError(errorMessage);
+      trackAudioError(errorMessage, currentStation.title);
       return;
     }
 
     const handleError = (e: ErrorEvent) => {
       console.error('Audio error:', e);
-      setAudioError('Failed to load audio stream. Please try again later.');
+      const errorMessage = 'Failed to load audio stream. Please try again later.';
+      setAudioError(errorMessage);
       setIsPlaying(false);
+      trackAudioError(errorMessage, currentStation.title);
     };
 
     const handleCanPlay = () => {
@@ -33,7 +38,9 @@ export function useAudioPlayer(currentStation: Station | undefined) {
           playPromise.catch(error => {
             console.error("Error playing audio:", error);
             setIsPlaying(false);
-            setAudioError('Failed to play audio stream. Please try again.');
+            const errorMessage = 'Failed to play audio stream. Please try again.';
+            setAudioError(errorMessage);
+            trackAudioError(errorMessage, currentStation.title);
           });
         }
       }
@@ -82,7 +89,9 @@ export function useAudioPlayer(currentStation: Station | undefined) {
           .catch(error => {
             console.error("Error playing audio:", error);
             setIsPlaying(false);
-            setAudioError('Failed to play audio stream. Please try again.');
+            const errorMessage = 'Failed to play audio stream. Please try again.';
+            setAudioError(errorMessage);
+            trackAudioError(errorMessage, currentStation.title);
           });
       }
     }

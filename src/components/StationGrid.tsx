@@ -2,8 +2,9 @@ import { Station } from '../types';
 import { StationCard } from './StationCard';
 import { FavoriteStations } from './FavoriteStations';
 import { Search } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useFavorites } from '../hooks/useFavorites';
+import { trackSearch } from '../lib/analytics';
 
 interface StationGridProps {
   stations: Station[];
@@ -19,6 +20,17 @@ export function StationGrid({ stations, onSelectStation, selectedStation }: Stat
     station.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     station.description.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  // Track search events with debouncing
+  useEffect(() => {
+    if (searchQuery.trim()) {
+      const timeoutId = setTimeout(() => {
+        trackSearch(searchQuery, filteredStations.length);
+      }, 500); // Debounce search tracking by 500ms
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [searchQuery, filteredStations.length]);
 
   return (
     <div className="container mx-auto px-4 py-8">

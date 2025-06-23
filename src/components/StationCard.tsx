@@ -1,5 +1,6 @@
 import { Headphones, Heart } from 'lucide-react';
 import { Station } from '../types';
+import { trackFavoriteToggle } from '../lib/analytics';
 
 interface StationCardProps {
   station: Station;
@@ -20,6 +21,8 @@ export function StationCard({
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     onToggleFavorite(station);
+    // Track favorite toggle
+    trackFavoriteToggle(isFavorite ? 'remove' : 'add', station.title, station.id);
   };
 
   return (
