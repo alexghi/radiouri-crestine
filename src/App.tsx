@@ -1,23 +1,8 @@
-import { createClient, Provider } from 'urql';
-import { cacheExchange } from '@urql/exchange-graphcache';
-import { fetchExchange } from 'urql';
 import { RadioPlayer } from './components/RadioPlayer';
 import { Footer } from './components/Footer';
 import { Toaster } from 'sonner';
 import { useEffect } from 'react';
 import { initGA, pageview } from './lib/analytics.ts';
-
-const client = createClient({
-  url: 'https://graphql.radio-crestin.com/v1/graphql',
-  exchanges: [cacheExchange(), fetchExchange],
-  fetchOptions: () => ({
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-      'X-Requested-With': 'XMLHttpRequest',
-    },
-  }),
-});
 
 function App() {
   // Initialize Google Analytics
@@ -27,9 +12,10 @@ function App() {
   }, []);
 
   return (
-    <Provider value={client}>
+    <div className="relative">
       <RadioPlayer />
       <Footer />
+      
       <Toaster
         position="top-right"
         toastOptions={{
@@ -42,7 +28,7 @@ function App() {
         }}
         className="sonner-toaster"
       />
-    </Provider>
+    </div>
   );
 }
 

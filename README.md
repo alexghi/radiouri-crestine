@@ -18,4 +18,4 @@ deployed in vercel cand ruleaza deploy-ul, are nevoie de tsconfig distinct pentr
 
 ##### Multumiri 
 
-Radio Crestin: `https://graphql-viewer.radio-crestin.com/`
+Radio Crestin pentru datele de stații radio
