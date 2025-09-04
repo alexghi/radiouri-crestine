@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Minimize2, Maximize2, X, ChevronDown, ChevronUp } from 'lucide-react';
+import { Minimize2, Maximize2, X, ChevronDown, ChevronUp, Loader2, Volume2, VolumeX } from 'lucide-react';
 import { Station } from '../types';
 import { StationDisplay } from './StationDisplay';
 import { StationControls } from './StationControls';
@@ -10,10 +10,13 @@ interface FloatingPlayerProps {
   isPlaying: boolean;
   volume: number;
   audioError: string | null;
+  isLoading?: boolean;
   isMinimized: boolean;
+  isMuted?: boolean;
   onTogglePlay: () => void;
   onChangeStation: (direction: 'next' | 'prev') => void;
   onVolumeChange: (value: number) => void;
+  onToggleMute?: () => void;
   onToggleMinimize: () => void;
   onClose: () => void;
 }
@@ -23,14 +26,23 @@ export function FloatingPlayer({
   isPlaying,
   volume,
   audioError,
+  isLoading = false,
   isMinimized,
+  isMuted = false,
   onTogglePlay,
   onChangeStation,
   onVolumeChange,
+  onToggleMute,
   onToggleMinimize,
   onClose,
 }: FloatingPlayerProps) {
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+
+  // Calculate volume slider background
+  const fillPercent = (isMuted ? 0 : volume) * 100;
+  const volumeSliderStyle = {
+    background: `linear-gradient(to right, #a855f7 0%, #a855f7 ${fillPercent}%, rgba(255,255,255,0.2) ${fillPercent}%, rgba(255,255,255,0.2) 100%)`
+  };
 
   if (isMinimized) {
     return (
@@ -55,6 +67,38 @@ export function FloatingPlayer({
             onChangeStation={onChangeStation}
             minimized={true}
           />
+          <div className="h-8 w-[1px] bg-white/10 mx-1" />
+          <div className="flex items-center gap-2 min-w-0">
+            {onToggleMute && (
+              <button
+                onClick={onToggleMute}
+                className="text-white/70 hover:text-purple-400 transition-colors shrink-0"
+                title={isMuted ? 'Unmute' : 'Mute'}
+              >
+                {isMuted ? <VolumeX size={16} /> : <Volume2 size={16} />}
+              </button>
+            )}
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.01"
+              value={isMuted ? 0 : volume}
+              onChange={(e) => {
+                const newVolume = parseFloat(e.target.value);
+                if (onToggleMute) {
+                  if (newVolume === 0 && !isMuted) {
+                    onToggleMute();
+                  } else if (newVolume > 0 && isMuted) {
+                    onToggleMute();
+                  }
+                }
+                onVolumeChange(newVolume);
+              }}
+              className={`${onToggleMute ? 'w-16' : 'w-20'} h-1 bg-white/20 rounded-lg appearance-none cursor-pointer transition-all hover:h-1.5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-purple-400 [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:border-0 [&::-webkit-slider-thumb]:transition-all [&::-webkit-slider-thumb]:hover:bg-purple-300 [&::-webkit-slider-thumb]:hover:w-3.5 [&::-webkit-slider-thumb]:hover:h-3.5 [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-3 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-purple-400 [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:border-0 [&::-moz-range-track]:bg-transparent [&::-moz-range-thumb]:transition-all [&::-moz-range-thumb]:hover:bg-purple-300`}
+              style={volumeSliderStyle}
+            />
+          </div>
           <div className="h-8 w-[1px] bg-white/10 mx-1" />
           <button
             onClick={onToggleMinimize}
@@ -94,6 +138,13 @@ export function FloatingPlayer({
           {audioError && (
             <div className="bg-red-500/20 text-red-200 p-3 rounded-lg mb-6 text-sm">
               {audioError}
+            </div>
+          )}
+
+          {isLoading && (
+            <div className="bg-purple-500/20 text-purple-200 p-3 rounded-lg mb-6 text-sm flex items-center gap-2">
+              <Loader2 size={16} className="animate-spin" />
+              Loading stream...
             </div>
           )}
 

@@ -21,6 +21,11 @@ export function FavoriteStations({
     onRemoveFavorite?.(station);
   };
 
+  const handleRemoveKeyboard = (e: React.KeyboardEvent, station: Station) => {
+    e.stopPropagation();
+    onRemoveFavorite?.(station);
+  };
+
   return (
     <div className="mb-8">
       <div className="flex items-center gap-2 mb-4">
@@ -37,13 +42,21 @@ export function FavoriteStations({
             }`}
           >
             <div className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity">
-              <button
+              <div
                 onClick={(e) => handleRemove(e, station)}
-                className="bg-black/40 hover:bg-red-500 text-white/70 hover:text-white rounded-full p-1 backdrop-blur-sm transition-all"
+                className="bg-black/40 hover:bg-red-500 text-white/70 hover:text-white rounded-full p-1 backdrop-blur-sm transition-all cursor-pointer"
                 title="Remove from favorites"
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleRemoveKeyboard(e, station);
+                  }
+                }}
               >
                 <X size={14} />
-              </button>
+              </div>
             </div>
             <img
               src={station.thumbnail_url || "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=800"}

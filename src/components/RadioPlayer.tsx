@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Station } from '../types';
 import { ErrorDisplay } from './ErrorDisplay';
 import { LoadingDisplay } from './LoadingDisplay';
 import { StationGrid } from './StationGrid';
 import { FloatingPlayer } from './FloatingPlayer';
+import { AudioDebugger } from './AudioDebugger';
 import { useAudioPlayer } from '../hooks/useAudioPlayer';
 import { useStations } from '../hooks/useStations';
 import { 
@@ -21,14 +22,21 @@ export function RadioPlayer() {
   const [selectedStation, setSelectedStation] = useState<Station | null>(null);
   const [isMinimized, setIsMinimized] = useState(false);
   const [sessionStartTime, setSessionStartTime] = useState<Date | null>(null);
+  
+  // Keep track of volume change timeout for cleanup
+  const volumeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const {
     audioRef,
+    audioRef2,
     isPlaying,
     volume,
+    isMuted,
     audioError,
+    isLoading,
     setVolume,
     togglePlay,
+    toggleMute,
     setAudioError
   } = useAudioPlayer(selectedStation || undefined);
 
@@ -49,10 +57,6 @@ export function RadioPlayer() {
     
     setAudioError(null);
     
-    if (audioRef.current) {
-      audioRef.current.pause();
-    }
-    
     const newIndex = direction === 'next'
       ? (currentIndex + 1) % stations.length
       : (currentIndex - 1 + stations.length) % stations.length;
@@ -67,16 +71,13 @@ export function RadioPlayer() {
     setVolume(newVolume);
     
     // Track volume changes (throttled to avoid too many events)
-    const throttledTrackVolume = (() => {
-      let timeout: NodeJS.Timeout | null = null;
-      return (vol: number) => {
-        if (timeout) clearTimeout(timeout);
-        timeout = setTimeout(() => {
-          trackVolumeChange(vol);
-        }, 500);
-      };
-    })();
-    throttledTrackVolume(newVolume);
+    if (volumeTimeoutRef.current) {
+      clearTimeout(volumeTimeoutRef.current);
+    }
+    volumeTimeoutRef.current = setTimeout(() => {
+      trackVolumeChange(newVolume);
+      volumeTimeoutRef.current = null;
+    }, 500);
   };
 
   const handleToggleMinimize = () => {
@@ -105,6 +106,17 @@ export function RadioPlayer() {
       }
     }
   }, [isPlaying, selectedStation, sessionStartTime]);
+
+  // Cleanup effect for component unmount
+  useEffect(() => {
+    return () => {
+      // Clean up volume change timeout
+      if (volumeTimeoutRef.current) {
+        clearTimeout(volumeTimeoutRef.current);
+        volumeTimeoutRef.current = null;
+      }
+    };
+  }, []);
 
   if (loading) {
     return <LoadingDisplay />;
@@ -135,11 +147,14 @@ export function RadioPlayer() {
           station={selectedStation}
           isPlaying={isPlaying}
           volume={volume}
+          isMuted={isMuted}
           audioError={audioError}
+          isLoading={isLoading}
           isMinimized={isMinimized}
           onTogglePlay={togglePlay}
           onChangeStation={handleChangeStation}
           onVolumeChange={handleVolumeChange}
+          onToggleMute={toggleMute}
           onToggleMinimize={handleToggleMinimize}
           onClose={handleClosePlayer}
         />
@@ -148,6 +163,25 @@ export function RadioPlayer() {
       <audio
         ref={audioRef}
         preload="none"
+        crossOrigin="anonymous"
+        playsInline
+        controls={false}
+      />
+      <audio
+        ref={audioRef2}
+        preload="none"
+        crossOrigin="anonymous"
+        playsInline
+        controls={false}
+      />
+
+      <AudioDebugger
+        audioRef={audioRef}
+        audioRef2={audioRef2}
+        currentStation={selectedStation || undefined}
+        isPlaying={isPlaying}
+        volume={volume}
+        audioError={audioError}
       />
     </div>
   );

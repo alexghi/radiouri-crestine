@@ -66,15 +66,24 @@ export function StationDropdown({
           </div>
           <div className="flex items-center space-x-2 flex-shrink-0">
             {selectedStation && (
-              <button
+              <div
                 onClick={(e) => {
                   e.stopPropagation();
                   handleClear();
                 }}
-                className="text-gray-400 hover:text-white"
+                className="text-gray-400 hover:text-white cursor-pointer p-1 -m-1"
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleClear();
+                  }
+                }}
               >
                 <X className="h-4 w-4" />
-              </button>
+              </div>
             )}
             <ChevronDown 
               className={`h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} 
