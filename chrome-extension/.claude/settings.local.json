@@ -1,8 +1,10 @@
 {
-  "enableAllProjectMcpServers": false,
   "permissions": {
     "allow": [
-      "Bash(npm run build-extension:*)"
+      "Bash(npm run build-extension:*)",
+      "Bash(chmod:*)",
+      "Bash(npm run build-package:*)"
     ]
-  }
+  },
+  "enableAllProjectMcpServers": false
 }

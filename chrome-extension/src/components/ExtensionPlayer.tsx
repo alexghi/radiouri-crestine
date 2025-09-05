@@ -255,98 +255,70 @@ export function ExtensionPlayer() {
           <h2 className="text-white font-bold">About</h2>
           <button
             onClick={() => setCurrentView('player')}
-            className="text-white/70 hover:text-purple-400 transition-colors"
+            className="text-white/70 hover:text-white transition-colors"
           >
             Back to Player
           </button>
         </div>
         
         <div className="flex-1 p-6 overflow-y-auto">
-          {/* Central Content with Flowing Layout */}
-          <div className="max-w-sm mx-auto space-y-8">
+          <div className="max-w-sm mx-auto space-y-6">
             
             {/* App Icon & Title */}
             <div className="text-center">
-              <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-purple-700 rounded-3xl mx-auto mb-6 flex items-center justify-center shadow-2xl">
+              <button
+                onClick={() => window.open('https://radiouri-crestine.ro', '_blank')}
+                className="w-16 h-16 bg-purple-500/20 rounded-2xl mx-auto mb-4 flex items-center justify-center hover:bg-purple-500/30 transition-colors cursor-pointer border border-purple-500/30"
+              >
                 <img src="/icons/favicon.png" alt="Radio Crestin" className="w-8 h-8" />
-              </div>
-              <h3 className="text-2xl font-bold text-white mb-2">Radio Crestin</h3>
-              <div className="w-16 h-px bg-gradient-to-r from-transparent via-purple-400 to-transparent mx-auto mb-6"></div>
+              </button>
+              <h3 className="text-xl font-bold text-white mb-2">Radio Crestin</h3>
             </div>
 
             {/* Author Section */}
             <div className="text-center">
-              <div className="flex items-center justify-center gap-2 mb-3">
-                <User size={18} className="text-purple-400" />
-                <span className="text-white font-medium">Author: Alex Ghiurau</span>
-              </div>
+              <p className="text-white/70 text-sm mb-1">Author</p>
+              <p className="text-purple-300 font-medium">Alex Ghiurau</p>
             </div>
 
-            {/* Location Section */}
-            <div className="text-center">
-              <div className="flex items-center justify-center gap-2 mb-3">
-                <MapPin size={18} className="text-red-400" />
-                <span className="text-white">Made with ❤️ in Transylvania</span>
-              </div>
-            </div>
-
-            {/* Divider */}
-            <div className="flex items-center gap-4">
-              <div className="flex-1 h-px bg-gradient-to-r from-transparent to-white/10"></div>
-              <Heart size={12} className="text-purple-400" fill="currentColor" />
-              <div className="flex-1 h-px bg-gradient-to-l from-transparent to-white/10"></div>
-            </div>
+            {/* Purple Divider */}
+            <div className="w-16 h-px bg-gradient-to-r from-transparent via-purple-400 to-transparent mx-auto"></div>
 
             {/* Special Thanks */}
             <div className="text-center">
-              <p className="text-white/80 text-sm mb-2">Special thanks to</p>
-              <p className="text-purple-300 font-semibold text-lg">Iosif & Elisei Nicolae</p>
+              <p className="text-white/70 text-sm mb-1">Special thanks to</p>
+              <p className="text-purple-300 font-medium">Iosif & Elisei Nicolae</p>
             </div>
 
-            {/* Another Divider */}
-            <div className="flex items-center gap-4">
-              <div className="flex-1 h-px bg-gradient-to-r from-transparent to-white/10"></div>
-              <Globe size={12} className="text-blue-400" />
-              <div className="flex-1 h-px bg-gradient-to-l from-transparent to-white/10"></div>
-            </div>
+            {/* Purple Divider */}
+            <div className="w-16 h-px bg-gradient-to-r from-transparent via-purple-400 to-transparent mx-auto"></div>
 
             {/* Websites */}
-            <div className="text-center space-y-4">
-              <p className="text-white/80 text-sm">Visit our websites</p>
-              <div className="space-y-3">
+            <div className="text-center space-y-3">
+              <p className="text-white/70 text-sm">Visit our websites</p>
+              <div className="space-y-2">
                 <a
                   href="https://radiouri-crestine.ro"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex items-center justify-center gap-2 text-purple-400 hover:text-purple-300 transition-all duration-200 hover:scale-105"
+                  className="block text-purple-300 hover:text-purple-200 transition-colors text-sm underline"
                 >
-                  <Globe size={16} className="opacity-60" />
-                  <span className="font-medium">radiouri-crestine.ro</span>
-                  <div className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-full h-full">
-                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                      <polyline points="15,3 21,3 21,9" />
-                      <line x1="10" y1="14" x2="21" y2="3" />
-                    </svg>
-                  </div>
+                  radiouri-crestine.ro
                 </a>
                 <a
                   href="https://radio-crestin.ro"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex items-center justify-center gap-2 text-purple-400 hover:text-purple-300 transition-all duration-200 hover:scale-105"
+                  className="block text-purple-300 hover:text-purple-200 transition-colors text-sm underline"
                 >
-                  <Globe size={16} className="opacity-60" />
-                  <span className="font-medium">radio-crestin.ro</span>
-                  <div className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-full h-full">
-                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                      <polyline points="15,3 21,3 21,9" />
-                      <line x1="10" y1="14" x2="21" y2="3" />
-                    </svg>
-                  </div>
+                  radio-crestin.ro
                 </a>
               </div>
+            </div>
+
+            {/* Location Section - Moved to last */}
+            <div className="text-center">
+              <span className="text-white/60 text-sm">Made with ❤️ in Transylvania</span>
             </div>
 
           </div>

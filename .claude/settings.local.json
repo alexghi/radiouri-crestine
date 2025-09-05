@@ -6,7 +6,9 @@
       "Bash(npm run build:*)",
       "Bash(./build-extension.sh:*)",
       "Bash(bash:*)",
-      "Read(//Users/alex/Desktop/**)"
+      "Read(//Users/alex/Desktop/**)",
+      "WebSearch",
+      "Bash(chmod:*)"
     ],
     "deny": []
   }
