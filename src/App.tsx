@@ -1,8 +1,19 @@
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { RadioPlayer } from './components/RadioPlayer';
 import { Footer } from './components/Footer';
+import { PrivacyPolicy } from './components/PrivacyPolicy';
 import { Toaster } from 'sonner';
 import { useEffect } from 'react';
 import { initGA, pageview } from './lib/analytics.ts';
+
+function HomePage() {
+  return (
+    <div className="relative">
+      <RadioPlayer />
+      <Footer />
+    </div>
+  );
+}
 
 function App() {
   // Initialize Google Analytics
@@ -12,9 +23,11 @@ function App() {
   }, []);
 
   return (
-    <div className="relative">
-      <RadioPlayer />
-      <Footer />
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+      </Routes>
       
       <Toaster
         position="top-right"
@@ -28,7 +41,7 @@ function App() {
         }}
         className="sonner-toaster"
       />
-    </div>
+    </Router>
   );
 }
 

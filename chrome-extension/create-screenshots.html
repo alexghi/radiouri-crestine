@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radio Crestin Extension Screenshots</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'spotify-base': '#121212',
+                        'spotify-hover': '#1a1a1a',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .screenshot-container {
+            width: 1280px;
+            height: 800px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .browser-frame {
+            width: 420px;
+            height: 580px;
+            background: #f3f4f6;
+            border-radius: 12px;
+            padding: 8px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        .browser-header {
+            height: 40px;
+            background: #e5e7eb;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            gap: 8px;
+        }
+        .browser-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .extension-popup {
+            width: 380px;
+            height: 500px;
+            background: #121212;
+            border-radius: 0 0 8px 8px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+        .line-clamp-2 {
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+        }
+        .screenshot-label {
+            position: absolute;
+            top: 40px;
+            left: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            color: #1f2937;
+            font-size: 18px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="p-8">
+        <h1 class="text-3xl font-bold text-center mb-8">Radio Crestin Extension Screenshots</h1>
+        
+        <!-- Screenshot 1: Main Player Interface -->
+        <div class="screenshot-container mb-8" id="screenshot1">
+            <div class="screenshot-label">Main Player Interface</div>
+            <div class="browser-frame">
+                <div class="browser-header">
+                    <div class="browser-dot bg-red-500"></div>
+                    <div class="browser-dot bg-yellow-500"></div>
+                    <div class="browser-dot bg-green-500"></div>
+                    <div class="flex-1 text-center text-sm text-gray-600">Radio Crestin Player</div>
+                </div>
+                <div class="extension-popup">
+                    <!-- Header -->
+                    <div class="flex items-center justify-between p-4 border-b border-white/10">
+                        <h1 class="text-white font-bold">Radio Crestin</h1>
+                        <div class="flex items-center gap-3">
+                            <button class="flex items-center gap-1 text-white/70 hover:text-purple-400 transition-colors p-1">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                </svg>
+                                <span class="text-xs text-purple-400">(3)</span>
+                            </button>
+                            <button class="flex items-center text-white/70 hover:text-purple-400 transition-colors p-1">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Player Content -->
+                    <div class="flex-1 p-4 flex flex-col">
+                        <!-- Station Display -->
+                        <div class="text-center mb-6">
+                            <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=800" 
+                                 alt="Station" class="w-24 h-24 rounded-2xl object-cover mx-auto mb-4 shadow-lg">
+                            <h2 class="text-white text-xl font-bold mb-2">Radio Vocea Evangheliei</h2>
+                            <div class="space-y-1">
+                                <p class="text-purple-200 font-medium">Amazing Grace</p>
+                                <p class="text-white/70 text-sm">Chris Tomlin</p>
+                            </div>
+                            <p class="text-white/50 text-sm mt-2">1,234 listeners</p>
+                        </div>
+                        
+                        <!-- Controls -->
+                        <div class="mt-auto space-y-4">
+                            <div class="flex items-center justify-center gap-4">
+                                <button class="text-white hover:text-purple-400 transition-colors p-2 rounded-full hover:bg-white/10">
+                                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/>
+                                    </svg>
+                                </button>
+                                <button class="bg-purple-600 hover:bg-purple-700 text-white p-3 rounded-full">
+                                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                                    </svg>
+                                </button>
+                                <button class="text-white hover:text-purple-400 transition-colors p-2 rounded-full hover:bg-white/10">
+                                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            
+                            <!-- Volume Control -->
+                            <div class="flex items-center gap-3">
+                                <svg class="w-5 h-5 text-white/70" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                                </svg>
+                                <div class="flex-1 bg-white/20 rounded-lg h-1 relative">
+                                    <div class="bg-purple-400 h-1 rounded-lg w-3/5"></div>
+                                    <div class="absolute right-2/5 top-1/2 transform -translate-y-1/2 w-3 h-3 bg-purple-400 rounded-full"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- Favorite Button -->
+                            <div class="flex items-center justify-center">
+                                <button class="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-500/20 text-red-400 hover:bg-red-500/30">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                    </svg>
+                                    Remove from Favorites
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screenshot 2: Favorites View -->
+        <div class="screenshot-container mb-8" id="screenshot2">
+            <div class="screenshot-label">Favorites Management</div>
+            <div class="browser-frame">
+                <div class="browser-header">
+                    <div class="browser-dot bg-red-500"></div>
+                    <div class="browser-dot bg-yellow-500"></div>
+                    <div class="browser-dot bg-green-500"></div>
+                    <div class="flex-1 text-center text-sm text-gray-600">Radio Crestin Player - Favorites</div>
+                </div>
+                <div class="extension-popup">
+                    <!-- Header -->
+                    <div class="flex items-center justify-between p-4 border-b border-white/10">
+                        <h2 class="text-white font-bold">Favorites</h2>
+                        <button class="text-white/70 hover:text-purple-400 transition-colors">
+                            Back to Player
+                        </button>
+                    </div>
+                    
+                    <!-- Favorites List -->
+                    <div class="flex-1 overflow-y-auto p-2">
+                        <div class="space-y-2">
+                            <!-- Favorite Station 1 -->
+                            <div class="p-3 rounded-lg bg-purple-600 text-white cursor-pointer">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-3">
+                                        <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=800" 
+                                             alt="Station" class="w-12 h-12 rounded-lg object-cover">
+                                        <div class="min-w-0 flex-1">
+                                            <h3 class="font-medium text-sm truncate">Radio Vocea Evangheliei</h3>
+                                            <p class="text-xs text-white/70 truncate">Amazing Grace</p>
+                                        </div>
+                                    </div>
+                                    <button class="p-1 rounded-full text-red-400">
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Favorite Station 2 -->
+                            <div class="p-3 rounded-lg hover:bg-white/10 text-white cursor-pointer">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-3">
+                                        <img src="https://images.unsplash.com/photo-1471478331149-c72f17e33c73?auto=format&fit=crop&w=800" 
+                                             alt="Station" class="w-12 h-12 rounded-lg object-cover">
+                                        <div class="min-w-0 flex-1">
+                                            <h3 class="font-medium text-sm truncate">Radio Creștin Aripi Spre Cer</h3>
+                                            <p class="text-xs text-white/70 truncate">Spiritual Song</p>
+                                        </div>
+                                    </div>
+                                    <button class="p-1 rounded-full text-red-400">
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Favorite Station 3 -->
+                            <div class="p-3 rounded-lg hover:bg-white/10 text-white cursor-pointer">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-3">
+                                        <img src="https://images.unsplash.com/photo-1507838153414-b4b713384a76?auto=format&fit=crop&w=800" 
+                                             alt="Station" class="w-12 h-12 rounded-lg object-cover">
+                                        <div class="min-w-0 flex-1">
+                                            <h3 class="font-medium text-sm truncate">Radio Emanuel</h3>
+                                            <p class="text-xs text-white/70 truncate">Gospel Music</p>
+                                        </div>
+                                    </div>
+                                    <button class="p-1 rounded-full text-red-400">
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screenshot 3: All Stations View -->
+        <div class="screenshot-container mb-8" id="screenshot3">
+            <div class="screenshot-label">Browse All Stations</div>
+            <div class="browser-frame">
+                <div class="browser-header">
+                    <div class="browser-dot bg-red-500"></div>
+                    <div class="browser-dot bg-yellow-500"></div>
+                    <div class="browser-dot bg-green-500"></div>
+                    <div class="flex-1 text-center text-sm text-gray-600">Radio Crestin Player - All Stations</div>
+                </div>
+                <div class="extension-popup">
+                    <!-- Header -->
+                    <div class="flex items-center justify-between p-4 border-b border-white/10">
+                        <h2 class="text-white font-bold">All Stations</h2>
+                        <button class="text-white/70 hover:text-purple-400 transition-colors">
+                            Back to Player
+                        </button>
+                    </div>
+                    
+                    <!-- Stations List -->
+                    <div class="flex-1 overflow-y-auto p-2">
+                        <div class="space-y-2">
+                            <!-- Station 1 -->
+                            <div class="p-3 rounded-lg hover:bg-white/10 text-white cursor-pointer">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-3">
+                                        <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=800" 
+                                             alt="Station" class="w-12 h-12 rounded-lg object-cover">
+                                        <div class="min-w-0 flex-1">
+                                            <h3 class="font-medium text-sm truncate">Radio Vocea Evangheliei</h3>
+                                            <p class="text-xs text-white/70 truncate">Amazing Grace</p>
+                                        </div>
+                                    </div>
+                                    <button class="p-1 rounded-full text-white/50 hover:text-red-400">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Station 2 -->
+                            <div class="p-3 rounded-lg hover:bg-white/10 text-white cursor-pointer">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-3">
+                                        <img src="https://images.unsplash.com/photo-1471478331149-c72f17e33c73?auto=format&fit=crop&w=800" 
+                                             alt="Station" class="w-12 h-12 rounded-lg object-cover">
+                                        <div class="min-w-0 flex-1">
+                                            <h3 class="font-medium text-sm truncate">Radio Creștin Aripi Spre Cer</h3>
+                                            <p class="text-xs text-white/70 truncate">Spiritual Song</p>
+                                        </div>
+                                    </div>
+                                    <button class="p-1 rounded-full text-red-400">
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Station 3 -->
+                            <div class="p-3 rounded-lg hover:bg-white/10 text-white cursor-pointer">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-3">
+                                        <img src="https://images.unsplash.com/photo-1507838153414-b4b713384a76?auto=format&fit=crop&w=800" 
+                                             alt="Station" class="w-12 h-12 rounded-lg object-cover">
+                                        <div class="min-w-0 flex-1">
+                                            <h3 class="font-medium text-sm truncate">Radio Emanuel</h3>
+                                            <p class="text-xs text-white/70 truncate">Gospel Music</p>
+                                        </div>
+                                    </div>
+                                    <button class="p-1 rounded-full text-white/50 hover:text-red-400">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Station 4 -->
+                            <div class="p-3 rounded-lg hover:bg-white/10 text-white cursor-pointer">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-3">
+                                        <img src="https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?auto=format&fit=crop&w=800" 
+                                             alt="Station" class="w-12 h-12 rounded-lg object-cover">
+                                        <div class="min-w-0 flex-1">
+                                            <h3 class="font-medium text-sm truncate">Radio Lumina</h3>
+                                            <p class="text-xs text-white/70 truncate">Christian Contemporary</p>
+                                        </div>
+                                    </div>
+                                    <button class="p-1 rounded-full text-white/50 hover:text-red-400">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Station 5 -->
+                            <div class="p-3 rounded-lg hover:bg-white/10 text-white cursor-pointer">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-3">
+                                        <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=800" 
+                                             alt="Station" class="w-12 h-12 rounded-lg object-cover">
+                                        <div class="min-w-0 flex-1">
+                                            <h3 class="font-medium text-sm truncate">Radio Baptista</h3>
+                                            <p class="text-xs text-white/70 truncate">Worship Songs</p>
+                                        </div>
+                                    </div>
+                                    <button class="p-1 rounded-full text-white/50 hover:text-red-400">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screenshot 4: Loading State -->
+        <div class="screenshot-container mb-8" id="screenshot4">
+            <div class="screenshot-label">Streaming & Controls</div>
+            <div class="browser-frame">
+                <div class="browser-header">
+                    <div class="browser-dot bg-red-500"></div>
+                    <div class="browser-dot bg-yellow-500"></div>
+                    <div class="browser-dot bg-green-500"></div>
+                    <div class="flex-1 text-center text-sm text-gray-600">Radio Crestin Player - Now Playing</div>
+                </div>
+                <div class="extension-popup">
+                    <!-- Header -->
+                    <div class="flex items-center justify-between p-4 border-b border-white/10">
+                        <h1 class="text-white font-bold">Radio Crestin</h1>
+                        <div class="flex items-center gap-3">
+                            <button class="flex items-center gap-1 text-white/70 hover:text-purple-400 transition-colors p-1">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                </svg>
+                                <span class="text-xs text-purple-400">(3)</span>
+                            </button>
+                            <button class="flex items-center text-white/70 hover:text-purple-400 transition-colors p-1">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Player Content -->
+                    <div class="flex-1 p-4 flex flex-col">
+                        <!-- Station Display -->
+                        <div class="text-center mb-6">
+                            <img src="https://images.unsplash.com/photo-1471478331149-c72f17e33c73?auto=format&fit=crop&w=800" 
+                                 alt="Station" class="w-24 h-24 rounded-2xl object-cover mx-auto mb-4 shadow-lg">
+                            <h2 class="text-white text-xl font-bold mb-2">Radio Emanuel</h2>
+                            <div class="space-y-1">
+                                <p class="text-purple-200 font-medium">How Great Thou Art</p>
+                                <p class="text-white/70 text-sm">Traditional Hymn</p>
+                            </div>
+                            <p class="text-white/50 text-sm mt-2">892 listeners</p>
+                        </div>
+                        
+                        <!-- Loading indicator -->
+                        <div class="bg-purple-500/20 text-purple-200 p-3 rounded-lg mb-4 text-sm flex items-center gap-2">
+                            <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            Loading stream...
+                        </div>
+                        
+                        <!-- Controls -->
+                        <div class="mt-auto space-y-4">
+                            <div class="flex items-center justify-center gap-4">
+                                <button class="text-white hover:text-purple-400 transition-colors p-2 rounded-full hover:bg-white/10">
+                                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/>
+                                    </svg>
+                                </button>
+                                <button class="bg-purple-600 hover:bg-purple-700 text-white p-3 rounded-full">
+                                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M8 5v14l11-7z"/>
+                                    </svg>
+                                </button>
+                                <button class="text-white hover:text-purple-400 transition-colors p-2 rounded-full hover:bg-white/10">
+                                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            
+                            <!-- Volume Control -->
+                            <div class="flex items-center gap-3">
+                                <svg class="w-5 h-5 text-white/70" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                                </svg>
+                                <div class="flex-1 bg-white/20 rounded-lg h-1 relative">
+                                    <div class="bg-purple-400 h-1 rounded-lg w-4/5"></div>
+                                    <div class="absolute right-1/5 top-1/2 transform -translate-y-1/2 w-3 h-3 bg-purple-400 rounded-full"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- Favorite Button -->
+                            <div class="flex items-center justify-center">
+                                <button class="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/10 text-white/70 hover:bg-white/20 hover:text-red-400">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                                    </svg>
+                                    Add to Favorites
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function captureScreenshot(elementId, filename) {
+            const element = document.getElementById(elementId);
+            
+            // Create a canvas element
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Set canvas size to screenshot dimensions
+            canvas.width = 1280;
+            canvas.height = 800;
+            
+            // This is a placeholder - in a real implementation you'd use html2canvas or similar
+            console.log(`Screenshot would be captured for ${filename}`);
+            
+            // For demo purposes, show instructions
+            alert(`To capture this screenshot:\n1. Right-click on the screenshot area\n2. "Inspect Element"\n3. Use browser dev tools to capture\n4. Save as "${filename}"`);
+        }
+        
+        // Add click handlers to screenshots
+        document.getElementById('screenshot1').addEventListener('click', () => captureScreenshot('screenshot1', 'main-player-interface.png'));
+        document.getElementById('screenshot2').addEventListener('click', () => captureScreenshot('screenshot2', 'favorites-management.png'));
+        document.getElementById('screenshot3').addEventListener('click', () => captureScreenshot('screenshot3', 'browse-all-stations.png'));
+        document.getElementById('screenshot4').addEventListener('click', () => captureScreenshot('screenshot4', 'streaming-controls.png'));
+    </script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+{
+  "manifest_version": 3,
+  "name": "Radio Crestin Player",
+  "short_name": "Radio Crestin",
+  "version": "1.0.0",
+  "description": "Compact radio player for Christian radio stations with favorites management. Stream live Christian radio directly from your browser toolbar.",
+  "author": "Alex Ghiurau",
+  "homepage_url": "https://radiouri-crestine.ro/",
+  
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "https://radiocrestin.ro/*",
+    "https://*.radiocrestin.ro/*",
+    "https://api.radiocrestin.ro/*"
+  ],
+  
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Radio Crestin Player - Christian Radio Stations",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  
+  "background": {
+    "service_worker": "background.js"
+  },
+  
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; media-src 'self' https: data: blob:;"
+  },
+  
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  
+  "minimum_chrome_version": "88",
+  
+  "externally_connectable": {
+    "matches": [
+      "https://radiocrestin.ro/*",
+      "https://*.radiocrestin.ro/*"
+    ]
+  }
+}

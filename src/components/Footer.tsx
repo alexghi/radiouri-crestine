@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
+import { Link } from "react-router-dom";
 import { Mail } from "lucide-react";
 import { toast } from "sonner";
 import { trackNewsletterSubscribe } from "../lib/analytics";
@@ -141,10 +142,18 @@ export function Footer() {
               <p className="text-gray-200">
                 © {new Date().getFullYear()} Radio Creștin. All rights reserved.
               </p>
-              <p className="text-gray-200">
-                Made with <span className="text-red-500">❤️</span> in
-                Transylvania
-              </p>
+              <div className="flex items-center justify-center gap-4 text-sm">
+                <Link 
+                  to="/privacy-policy" 
+                  className="text-gray-300 hover:text-white transition-colors"
+                >
+                  Privacy Policy
+                </Link>
+                <span className="text-gray-500">•</span>
+                <p className="text-gray-200">
+                  Made with <span className="text-red-500">❤️</span> in Transylvania
+                </p>
+              </div>
             </div>
           </div>
         </div>
