@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://radiouri-crestine.ro/sitemap.xml
+
+# Block access to sensitive areas
+Disallow: /api/
+Disallow: /*.json$
+Disallow: /chrome-extension/
+
+# Allow important pages
+Allow: /
+Allow: /privacy-policy

@@ -180,6 +180,36 @@ export function Footer() {
     <div>
       <footer className="bg-black/90 backdrop-blur-lg border-t border-white/5">
         <div className="container mx-auto px-4 py-16">
+          {/* SEO Content Section */}
+          <div className="mb-12 bg-white/5 backdrop-blur-sm rounded-2xl p-8">
+            <h2 className="text-white font-bold mb-6 text-2xl">
+              Radio Creștin - Posturi Radio Creștine Online
+            </h2>
+            <div className="grid md:grid-cols-2 gap-8 text-white/80 leading-relaxed">
+              <div>
+                <p className="mb-4">
+                  <strong>Radio Creștin</strong> este platforma ta de încredere pentru <strong>radiouri creștine online</strong>. 
+                  Oferim acces gratuit la cele mai bune <strong>posturi radio creștine</strong> din România și din întreaga lume.
+                </p>
+                <p className="mb-4">
+                  Fiecare <strong>post radio creștin</strong> din colecția noastră este selectat cu grijă pentru a-ți oferi 
+                  cea mai bună experiență de ascultare a muzicii creștine, predicilor și emisiunilor spirituale.
+                </p>
+              </div>
+              <div>
+                <p className="mb-4">
+                  Platforma noastră îți permite să asculți <strong>radio creștin live</strong> 24/7, 
+                  să salvezi <strong>posturile creștine</strong> preferate și să descoperi noi 
+                  <strong>radiouri creștine</strong> care să-ți îmbogățească viața spirituală.
+                </p>
+                <p>
+                  Indiferent dacă preferi muzica creștină contemporană sau tradițională, 
+                  vei găsi <strong>posturi radio</strong> potrivite pentru fiecare moment al zilei.
+                </p>
+              </div>
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-8">
             <div>
               <h3 className="text-white font-bold mb-6 text-xl">
@@ -215,6 +245,9 @@ export function Footer() {
               <p className="text-gray-200">
                 Made with <span className="text-red-500">❤️</span> in
                 Transylvania
+              </p>
+              <p className="text-gray-400 text-sm mt-4">
+                Cuvinte cheie: radio crestin, radiouri crestine, posturi radio, posturi crestine, radio crestin online, radiouri crestine live
               </p>
             </div>
           </div>

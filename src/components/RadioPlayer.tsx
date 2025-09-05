@@ -5,6 +5,7 @@ import { LoadingDisplay } from './LoadingDisplay';
 import { StationGrid } from './StationGrid';
 import { FloatingPlayer } from './FloatingPlayer';
 import { AudioDebugger } from './AudioDebugger';
+import { SEOHeader } from './SEOHeader';
 import { useAudioPlayer } from '../hooks/useAudioPlayer';
 import { useStations } from '../hooks/useStations';
 import { 
@@ -136,6 +137,7 @@ export function RadioPlayer() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-gray-900 to-black">
+      <SEOHeader />
       <StationGrid
         stations={stations}
         onSelectStation={handleStationSelect}
