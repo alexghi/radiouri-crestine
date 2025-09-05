@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Heart, List, Loader2, AlertCircle } from 'lucide-react';
+import { Heart, List, Loader2, AlertCircle, Info, User, MapPin, Globe, ArrowLeft } from 'lucide-react';
 import { Station } from '../types';
 import { useStations } from '../hooks/useStations';
 import { useFavorites } from '../hooks/useFavorites';
@@ -9,7 +9,7 @@ import { StationControls } from './StationControls';
 import { VolumeControl } from './VolumeControl';
 import { DebugInfo } from './DebugInfo';
 
-type View = 'player' | 'favorites' | 'all-stations';
+type View = 'player' | 'favorites' | 'all-stations' | 'about';
 
 export function ExtensionPlayer() {
   const [currentView, setCurrentView] = useState<View>('player');
@@ -154,6 +154,114 @@ export function ExtensionPlayer() {
     );
   }
 
+  if (currentView === 'about') {
+    return (
+      <div className="h-full bg-spotify-base flex flex-col">
+        {/* Simple Header */}
+        <div className="flex items-center justify-between p-4 border-b border-white/10">
+          <h2 className="text-white font-bold">About</h2>
+          <button
+            onClick={() => setCurrentView('player')}
+            className="text-white/70 hover:text-purple-400 transition-colors"
+          >
+            Back to Player
+          </button>
+        </div>
+        
+        <div className="flex-1 p-6 overflow-y-auto">
+          {/* Central Content with Flowing Layout */}
+          <div className="max-w-sm mx-auto space-y-8">
+            
+            {/* App Icon & Title */}
+            <div className="text-center">
+              <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-purple-700 rounded-3xl mx-auto mb-6 flex items-center justify-center shadow-2xl">
+                <Heart size={32} className="text-white" fill="currentColor" />
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-2">Radio Crestin</h3>
+              <div className="w-16 h-px bg-gradient-to-r from-transparent via-purple-400 to-transparent mx-auto mb-6"></div>
+            </div>
+
+            {/* Author Section */}
+            <div className="text-center">
+              <div className="flex items-center justify-center gap-2 mb-3">
+                <User size={18} className="text-purple-400" />
+                <span className="text-white font-medium">Author: Alex Ghiurau</span>
+              </div>
+            </div>
+
+            {/* Location Section */}
+            <div className="text-center">
+              <div className="flex items-center justify-center gap-2 mb-3">
+                <MapPin size={18} className="text-red-400" />
+                <span className="text-white">Made with ❤️ in Transylvania</span>
+              </div>
+            </div>
+
+            {/* Divider */}
+            <div className="flex items-center gap-4">
+              <div className="flex-1 h-px bg-gradient-to-r from-transparent to-white/10"></div>
+              <Heart size={12} className="text-purple-400" fill="currentColor" />
+              <div className="flex-1 h-px bg-gradient-to-l from-transparent to-white/10"></div>
+            </div>
+
+            {/* Special Thanks */}
+            <div className="text-center">
+              <p className="text-white/80 text-sm mb-2">Special thanks to</p>
+              <p className="text-purple-300 font-semibold text-lg">Iosif & Elisei Nicolae</p>
+            </div>
+
+            {/* Another Divider */}
+            <div className="flex items-center gap-4">
+              <div className="flex-1 h-px bg-gradient-to-r from-transparent to-white/10"></div>
+              <Globe size={12} className="text-blue-400" />
+              <div className="flex-1 h-px bg-gradient-to-l from-transparent to-white/10"></div>
+            </div>
+
+            {/* Websites */}
+            <div className="text-center space-y-4">
+              <p className="text-white/80 text-sm">Visit our websites</p>
+              <div className="space-y-3">
+                <a
+                  href="https://radiouri-crestine.ro"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-center justify-center gap-2 text-purple-400 hover:text-purple-300 transition-all duration-200 hover:scale-105"
+                >
+                  <Globe size={16} className="opacity-60" />
+                  <span className="font-medium">radiouri-crestine.ro</span>
+                  <div className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-full h-full">
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                      <polyline points="15,3 21,3 21,9" />
+                      <line x1="10" y1="14" x2="21" y2="3" />
+                    </svg>
+                  </div>
+                </a>
+                <a
+                  href="https://radio-crestin.ro"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-center justify-center gap-2 text-purple-400 hover:text-purple-300 transition-all duration-200 hover:scale-105"
+                >
+                  <Globe size={16} className="opacity-60" />
+                  <span className="font-medium">radio-crestin.ro</span>
+                  <div className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-full h-full">
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                      <polyline points="15,3 21,3 21,9" />
+                      <line x1="10" y1="14" x2="21" y2="3" />
+                    </svg>
+                  </div>
+                </a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (currentView === 'favorites') {
     return (
       <div className="h-full bg-spotify-base">
@@ -175,7 +283,16 @@ export function ExtensionPlayer() {
     <div className="h-full bg-spotify-base flex flex-col">
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-white/10">
-        <h1 className="text-white font-bold">Radio Crestin</h1>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setCurrentView('about')}
+            className="text-white/50 hover:text-purple-400 transition-colors p-1"
+            title="About"
+          >
+            <Info size={16} />
+          </button>
+          <h1 className="text-white font-bold">Radio Crestin</h1>
+        </div>
         <div className="flex items-center gap-3">
           <button
             onClick={() => setCurrentView('favorites')}
