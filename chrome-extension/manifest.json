@@ -21,7 +21,28 @@
     "https://*.shoutcast.com/*",
     "https://*.icecast.com/*",
     "https://*.streamguys1.com/*",
-    "https://*.zeno.fm/*"
+    "https://*.zeno.fm/*",
+    "https://*.faur.cc/*",
+    "https://faur.cc/*",
+    "https://*.bluespot.ro/*",
+    "https://bluespot.ro/*",
+    "http://*.bluespot.ro/*",
+    "http://bluespot.ro/*",
+    "http://*:8000/*",
+    "http://*:8001/*",
+    "http://*:8080/*",
+    "http://*:8443/*",
+    "https://*:8443/*",
+    "https://*.tunein.com/*",
+    "https://tunein.com/*",
+    "https://*.radiojar.com/*",
+    "https://radiojar.com/*",
+    "https://*.radio.co/*",
+    "https://radio.co/*",
+    "https://*.stream-server.nl/*",
+    "https://stream-server.nl/*",
+    "http://*.stream-server.nl/*",
+    "http://stream-server.nl/*"
   ],
   
   "action": {
@@ -40,7 +61,7 @@
   },
   
   "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'; media-src 'self' https: data: blob:;"
+    "extension_pages": "script-src 'self'; object-src 'self'; media-src 'self' https: http: data: blob: *;"
   },
   
   "icons": {

@@ -282,13 +282,33 @@ class BackgroundAudioManager {
         this.audioElement.removeEventListener('error', onError);
         this.audioElement.removeEventListener('canplay', onCanPlay);
         this.audioElement.removeEventListener('loadeddata', onLoadedData);
+        this.audioElement.removeEventListener('loadedmetadata', onLoadedMetadata);
       };
       
       const onError = (e: any) => {
         if (resolved) return;
         resolved = true;
         cleanup();
-        const errorMsg = e.target?.error ? `Audio error: ${e.target.error.message}` : 'Audio failed to load';
+        
+        let errorMsg = 'Audio failed to load';
+        if (e.target?.error) {
+          switch(e.target.error.code) {
+            case e.target.error.MEDIA_ERR_ABORTED:
+              errorMsg = 'Media loading aborted';
+              break;
+            case e.target.error.MEDIA_ERR_NETWORK:
+              errorMsg = 'Network error while loading media';
+              break;
+            case e.target.error.MEDIA_ERR_DECODE:
+              errorMsg = 'Media format not supported';
+              break;
+            case e.target.error.MEDIA_ERR_SRC_NOT_SUPPORTED:
+              errorMsg = 'Media source not supported';
+              break;
+            default:
+              errorMsg = `Audio error: ${e.target.error.message || 'Unknown error'}`;
+          }
+        }
         reject(new Error(errorMsg));
       };
       
@@ -305,25 +325,41 @@ class BackgroundAudioManager {
         cleanup();
         resolve();
       };
+
+      const onLoadedMetadata = () => {
+        if (resolved) return;
+        resolved = true;
+        cleanup();
+        resolve();
+      };
       
       // Set timeout for loading
       const timeout = setTimeout(() => {
         if (resolved) return;
         resolved = true;
         cleanup();
-        reject(new Error('Audio loading timeout'));
-      }, 15000); // 15 second timeout
+        reject(new Error('Audio loading timeout (15s)'));
+      }, 15000);
       
       this.audioElement.addEventListener('error', onError);
       this.audioElement.addEventListener('canplay', onCanPlay);
       this.audioElement.addEventListener('loadeddata', onLoadedData);
+      this.audioElement.addEventListener('loadedmetadata', onLoadedMetadata);
       
-      // Set crossOrigin to anonymous to help with CORS
-      this.audioElement.crossOrigin = 'anonymous';
-      this.audioElement.preload = 'none';
-      
-      this.audioElement.src = url;
-      this.audioElement.load();
+      try {
+        // Try different CORS settings
+        this.audioElement.crossOrigin = null; // First try without CORS
+        this.audioElement.preload = 'metadata';
+        
+        this.audioElement.src = url;
+        this.audioElement.load();
+      } catch (loadError) {
+        if (resolved) return;
+        resolved = true;
+        cleanup();
+        clearTimeout(timeout);
+        reject(new Error(`Failed to load audio: ${loadError}`));
+      }
       
       // Clear timeout on resolve/reject
       Promise.resolve().then(() => {
@@ -339,7 +375,26 @@ class BackgroundAudioManager {
       if (source.type === 'hls') {
         await this.setupHlsStream(source.url);
       } else {
-        await this.setupAudioStream(source.url);
+        // Try multiple approaches for audio streams
+        let attempts = [
+          () => this.setupAudioStream(source.url),
+          () => this.setupAudioStreamWithCors(source.url),
+          () => this.setupAudioStreamDirect(source.url)
+        ];
+
+        let lastError;
+        for (const attempt of attempts) {
+          try {
+            await attempt();
+            return true;
+          } catch (error) {
+            lastError = error;
+            console.warn(`Audio setup attempt failed:`, error);
+            // Wait briefly between attempts
+            await new Promise(resolve => setTimeout(resolve, 500));
+          }
+        }
+        throw lastError;
       }
       
       return true;
@@ -349,6 +404,60 @@ class BackgroundAudioManager {
     } finally {
       this.updateState({ isLoading: false });
     }
+  }
+
+  private async setupAudioStreamWithCors(url: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const tempAudio = new Audio();
+      tempAudio.crossOrigin = 'anonymous';
+      tempAudio.preload = 'metadata';
+      
+      const onCanPlay = () => {
+        // Copy successful settings to main audio element
+        this.audioElement.crossOrigin = 'anonymous';
+        this.audioElement.src = url;
+        resolve();
+      };
+      
+      const onError = (e: any) => {
+        reject(new Error('CORS audio loading failed'));
+      };
+      
+      tempAudio.addEventListener('canplay', onCanPlay, { once: true });
+      tempAudio.addEventListener('error', onError, { once: true });
+      
+      setTimeout(() => reject(new Error('CORS timeout')), 5000);
+      
+      tempAudio.src = url;
+      tempAudio.load();
+    });
+  }
+
+  private async setupAudioStreamDirect(url: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const tempAudio = new Audio();
+      tempAudio.crossOrigin = null;
+      tempAudio.preload = 'none';
+      
+      const onLoadedMetadata = () => {
+        // Copy successful settings to main audio element
+        this.audioElement.crossOrigin = null;
+        this.audioElement.src = url;
+        resolve();
+      };
+      
+      const onError = (e: any) => {
+        reject(new Error('Direct audio loading failed'));
+      };
+      
+      tempAudio.addEventListener('loadedmetadata', onLoadedMetadata, { once: true });
+      tempAudio.addEventListener('error', onError, { once: true });
+      
+      setTimeout(() => reject(new Error('Direct timeout')), 5000);
+      
+      tempAudio.src = url;
+      tempAudio.load();
+    });
   }
 
   async loadStation(station: Station): Promise<void> {
