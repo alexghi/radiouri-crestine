@@ -27,6 +27,24 @@
             justify-content: center;
             position: relative;
         }
+        .promo-small {
+            width: 440px;
+            height: 280px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .promo-marquee {
+            width: 1400px;
+            height: 560px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
         .browser-frame {
             width: 420px;
             height: 580px;
@@ -474,6 +492,129 @@
                 </div>
             </div>
         </div>
+
+        <!-- Small Promo Tile (440x280) -->
+        <div class="promo-small mb-8" id="promo-small">
+            <div class="screenshot-label" style="display: none;">Small Promo Tile (440x280)</div>
+            <div class="text-center text-white px-8">
+                <div class="mb-4">
+                    <div class="w-16 h-16 bg-purple-500/30 rounded-2xl mx-auto mb-3 flex items-center justify-center border border-purple-400/50">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTE2IDRWMTguNzNDMTQuNjEgMTcuOTMgMTIuNzkgMTcuNzMgMTEuMzMgMTguNTNDOC40IDE5LjggNy4yIDIzLjIgOC40NyAyNi4xM0M5Ljc0IDI5LjA2IDEzLjE0IDMwLjI2IDE2LjA3IDI5QzE5IDI3LjczIDIwLjIgMjQuMzMgMTguOTMgMjEuNEMxOC43MyAyMC45NyAxOC40NyAyMC41NyAxOC4xNCAyMC4yVjkuMzNIMjZWNEgxNloiIGZpbGw9IiNBODU1RjciLz4KPC9zdmc+" alt="Radio" class="w-6 h-6" />
+                    </div>
+                    <h2 class="text-xl font-bold mb-2">Radio Creștin Player</h2>
+                    <p class="text-white/80 text-sm leading-relaxed">Ascultă posturi radio creștine<br>direct din browser cu favorite</p>
+                    <div class="mt-4 flex justify-center items-center gap-4 text-xs text-white/60">
+                        <div class="flex items-center gap-1">
+                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                            </svg>
+                            <span>Favorite</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+                            </svg>
+                            <span>Live Stream</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                            </svg>
+                            <span>Multiple</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Marquee Promo Tile (1400x560) -->
+        <div class="promo-marquee mb-8" id="promo-marquee">
+            <div class="screenshot-label" style="display: none;">Marquee Promo Tile (1400x560)</div>
+            <div class="flex items-center justify-between w-full max-w-6xl px-16">
+                <!-- Left Content -->
+                <div class="text-white flex-1">
+                    <h1 class="text-5xl font-bold mb-4">Radio Creștin Player</h1>
+                    <p class="text-xl text-white/90 mb-6">Ascultă live posturi radio creștine direct din browser-ul tău</p>
+                    <div class="flex items-center gap-8 text-white/80 text-lg">
+                        <div class="flex items-center gap-3">
+                            <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                            </svg>
+                            <span>Gestionare Favorite</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+                            </svg>
+                            <span>Streaming HD</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                            </svg>
+                            <span>Multe Posturi</span>
+                        </div>
+                    </div>
+                    <div class="mt-8 bg-white/10 rounded-lg p-4 max-w-md">
+                        <p class="text-purple-200 text-sm mb-2">🎵 Acum cântă:</p>
+                        <p class="text-white font-medium">"Cel mai frumos nume" - Speranta</p>
+                        <p class="text-white/60 text-sm">Radio Vocea Evangheliei • 1,247 ascultători</p>
+                    </div>
+                </div>
+                
+                <!-- Right Content - Mini Extension Preview -->
+                <div class="flex-shrink-0 ml-12">
+                    <div class="w-80 h-96 bg-gray-800 rounded-2xl p-6 shadow-2xl border border-gray-700">
+                        <div class="flex items-center justify-between mb-4 pb-3 border-b border-white/10">
+                            <h3 class="text-white font-bold">Radio Creștin</h3>
+                            <div class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-purple-400" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                </svg>
+                                <span class="text-xs text-purple-400">(3)</span>
+                                <svg class="w-4 h-4 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=800" 
+                                 alt="Station" class="w-20 h-20 rounded-2xl object-cover mx-auto mb-3 shadow-lg">
+                            <h4 class="text-white text-sm font-medium mb-1">Radio Vocea Evangheliei</h4>
+                            <p class="text-purple-200 text-xs mb-1">Cel mai frumos nume</p>
+                            <p class="text-white/50 text-xs">Speranta</p>
+                            <p class="text-white/40 text-xs mt-2">1,247 ascultători</p>
+                        </div>
+                        <div class="mt-6 flex items-center justify-center gap-4">
+                            <button class="text-white/70 hover:text-purple-400 p-2 rounded-full hover:bg-white/10">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/>
+                                </svg>
+                            </button>
+                            <button class="bg-purple-600 text-white p-2 rounded-full shadow-lg">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                                </svg>
+                            </button>
+                            <button class="text-white/70 hover:text-purple-400 p-2 rounded-full hover:bg-white/10">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="mt-4 flex items-center gap-2">
+                            <svg class="w-4 h-4 text-white/50" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
+                            </svg>
+                            <div class="flex-1 bg-white/20 rounded-lg h-1 relative">
+                                <div class="bg-purple-400 h-1 rounded-lg w-3/5"></div>
+                                <div class="absolute right-2/5 top-1/2 transform -translate-y-1/2 w-2 h-2 bg-purple-400 rounded-full"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -500,6 +641,8 @@
         document.getElementById('screenshot2').addEventListener('click', () => captureScreenshot('screenshot2', 'favorites-management.png'));
         document.getElementById('screenshot3').addEventListener('click', () => captureScreenshot('screenshot3', 'browse-all-stations.png'));
         document.getElementById('screenshot4').addEventListener('click', () => captureScreenshot('screenshot4', 'streaming-controls.png'));
+        document.getElementById('promo-small').addEventListener('click', () => captureScreenshot('promo-small', 'radio-crestin-promo-small.png'));
+        document.getElementById('promo-marquee').addEventListener('click', () => captureScreenshot('promo-marquee', 'radio-crestin-promo-marquee.png'));
     </script>
 </body>
 </html>

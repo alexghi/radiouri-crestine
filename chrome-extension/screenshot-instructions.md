@@ -13,20 +13,27 @@ I've created professional mockup screenshots for your Chrome Web Store submissio
 2. **Set browser window size** (important for consistent results):
    - Open browser dev tools (F12)
    - Click the device toolbar icon (📱)
-   - Set custom size: **1280 x 800**
+   - Set custom size: **1280 x 800** for screenshots, **440 x 280** for small promo, **1400 x 560** for marquee promo
    - Close dev tools
+
+3. **4K Display Considerations**:
+   - Since you're on a 4K display, the images will be rendered @2x resolution
+   - Screenshots will be captured at 2560x1600, small promo at 880x560, marquee at 2800x1120
+   - **Use the resize script** (see below) to convert these to correct Chrome Web Store dimensions
+   - This results in crisp, high-quality images on all displays
 
 ## 🖼️ Screenshot Requirements
 
 Chrome Web Store requires:
-- **Size**: 1280x800 pixels (exactly)
+- **Screenshots**: 1280x800 pixels (exactly) - Minimum 1, maximum 5 screenshots
+- **Small Promo Tile**: 440x280 pixels (exactly) - Optional promotional image
+- **Marquee Promo Tile**: 1400x560 pixels (exactly) - Featured promotional image
 - **Format**: PNG or JPEG
 - **Quality**: High resolution, no compression artifacts
-- **Count**: Minimum 1, maximum 5 screenshots
 
-## 📋 Ready-Made Screenshots
+## 📋 Ready-Made Assets
 
-I've created 4 professional screenshots covering all extension features:
+I've created 6 professional assets covering all extension features and promotional needs:
 
 ### 1. **Main Player Interface** 
 - Shows the primary player with station playing
@@ -51,6 +58,18 @@ I've created 4 professional screenshots covering all extension features:
 - Volume controls and mute functionality
 - Station switching capabilities
 - Add to favorites (empty state)
+
+### 5. **Small Promo Tile (440x280)**
+- Compact promotional image for the Chrome Web Store
+- Features app icon, title, and key benefit
+- Clean, minimal design with purple gradient background
+- Perfect for store discovery and app listings
+
+### 6. **Marquee Promo Tile (1400x560)**
+- Large featured promotional banner
+- Showcases app benefits with mini extension preview
+- Professional marketing-style layout
+- Ideal for featured placement on the Chrome Web Store
 
 ## 💾 How to Capture
 
@@ -80,14 +99,65 @@ Use a browser extension like:
 - **Lightshot**
 - **Nimbus Screenshot**
 
+## 🔧 Resize Images (4K Display Users)
+
+Since you're on a 4K display, captured images will be @2x resolution. Use the provided script to resize them:
+
+### **Automatic Resize Script**
+
+1. **Save your captured images** in the `screenshots/` folder with these names:
+   - `screenshots/1.png`, `screenshots/2.png`, `screenshots/3.png`, `screenshots/4.png` (screenshots)
+   - `screenshots/small_promo.png` (small promotional tile)
+   - `screenshots/marquee_promo.png` (marquee promotional tile)
+
+2. **Run the resize script**:
+   ```bash
+   ./resize-images.sh
+   ```
+
+3. **Script requirements**:
+   - ImageMagick must be installed (`brew install imagemagick`)
+   - Screenshots must be placed in the `screenshots/` folder
+   - Run the script from the root directory (where `resize-images.sh` is located)
+
+### **What the script does**:
+- ✅ Resizes screenshots from 2560x1600 → 1280x800
+- ✅ Resizes small promo from 880x560 → 440x280  
+- ✅ Resizes marquee promo from 2800x1120 → 1400x560
+- ✅ Creates `resized_images/` folder with properly sized files
+- ✅ Generates `chrome-web-store-images.zip` for easy upload
+- ✅ Maintains high quality with exact dimension forcing
+
+### **Manual Resize (Alternative)**
+
+If you prefer manual resizing:
+```bash
+# Screenshots (2560x1600 → 1280x800)
+magick screenshot.png -resize 1280x800! screenshot_resized.png
+
+# Small promo (880x560 → 440x280) 
+magick small_promo.png -resize 440x280! small_promo_resized.png
+
+# Marquee promo (2800x1120 → 1400x560)
+magick marquee_promo.png -resize 1400x560! marquee_promo_resized.png
+```
+
 ## 📝 Suggested Filenames
 
-Save your screenshots with descriptive names:
+Save your assets with descriptive names:
 
-1. `radio-crestin-main-player.png`
-2. `radio-crestin-favorites.png`
-3. `radio-crestin-all-stations.png`
-4. `radio-crestin-streaming.png`
+**For Capture (before resize - save in screenshots/ folder):**
+- `screenshots/1.png`, `screenshots/2.png`, `screenshots/3.png`, `screenshots/4.png` (screenshots)
+- `screenshots/small_promo.png` (small promotional tile)
+- `screenshots/marquee_promo.png` (marquee promotional tile)
+
+**After Resize (for Chrome Web Store upload):**
+1. `1_resized.png` → `radio-crestin-main-player.png`
+2. `2_resized.png` → `radio-crestin-favorites.png`
+3. `3_resized.png` → `radio-crestin-all-stations.png`
+4. `4_resized.png` → `radio-crestin-streaming.png`
+5. `small_promo_resized.png` → `radio-crestin-promo-small.png`
+6. `marquee_promo_resized.png` → `radio-crestin-promo-marquee.png`
 
 ## ✅ Chrome Web Store Upload
 
@@ -96,6 +166,8 @@ When uploading to Chrome Web Store:
 1. **Go to** [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole/)
 2. **Navigate to** your extension listing
 3. **Click** "Store Listing" tab
+
+### Screenshots Section:
 4. **Scroll to** "Screenshots" section
 5. **Upload** all 4 screenshots
 6. **Add captions** (optional but recommended):
@@ -103,6 +175,12 @@ When uploading to Chrome Web Store:
    - "Manage your favorite stations"
    - "Browse all available Christian radio stations"
    - "High-quality audio streaming"
+
+### Promotional Images Section:
+7. **Scroll to** "Promotional images" section
+8. **Upload Small promo tile** (440x280): `radio-crestin-promo-small.png`
+9. **Upload Marquee promo tile** (1400x560): `radio-crestin-promo-marquee.png`
+10. These promotional images help your extension get featured and improve visibility in the Chrome Web Store
 
 ## 🎨 Screenshot Features Highlighted
 
