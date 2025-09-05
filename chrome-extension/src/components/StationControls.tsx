@@ -1,9 +1,11 @@
-import { Play, Pause, SkipForward, SkipBack } from 'lucide-react';
+import { Play, Pause, SkipForward, SkipBack, FastForward } from 'lucide-react';
 
 interface StationControlsProps {
   isPlaying: boolean;
   onTogglePlay: () => void;
   onChangeStation: (direction: 'next' | 'prev') => void;
+  onSkipStation?: () => void;
+  hasError?: boolean;
   minimized?: boolean;
 }
 
@@ -11,6 +13,8 @@ export function StationControls({
   isPlaying,
   onTogglePlay,
   onChangeStation,
+  onSkipStation,
+  hasError = false,
   minimized = false,
 }: StationControlsProps) {
   const iconSize = minimized ? 16 : 24;
@@ -43,6 +47,16 @@ export function StationControls({
       >
         <SkipForward size={iconSize} />
       </button>
+      
+      {hasError && onSkipStation && !minimized && (
+        <button
+          onClick={onSkipStation}
+          className="text-yellow-400 hover:text-yellow-300 transition-colors p-2 rounded-full hover:bg-yellow-400/10 border border-yellow-400/30"
+          title="Skip to working station"
+        >
+          <FastForward size={iconSize} />
+        </button>
+      )}
     </div>
   );
 }

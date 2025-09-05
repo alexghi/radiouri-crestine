@@ -10,6 +10,7 @@ export default defineConfig({
       input: {
         popup: resolve(__dirname, 'src/popup.html'),
         background: resolve(__dirname, 'src/background.ts'),
+        offscreen: resolve(__dirname, 'src/offscreen.ts'),
       },
       output: {
         entryFileNames: '[name].js',

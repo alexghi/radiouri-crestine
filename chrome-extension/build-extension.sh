@@ -14,7 +14,8 @@ npm run build
 cp manifest.json dist/
 cp -r icons dist/
 
-# Move popup.html to root
+# Copy offscreen.html manually and move popup.html to root
+cp src/offscreen.html dist/
 mv dist/src/popup.html dist/
 rmdir dist/src
 

@@ -8,12 +8,20 @@
   "homepage_url": "https://radiouri-crestine.ro/",
   
   "permissions": [
-    "storage"
+    "storage",
+    "offscreen"
   ],
   "host_permissions": [
     "https://radiocrestin.ro/*",
     "https://*.radiocrestin.ro/*",
-    "https://api.radiocrestin.ro/*"
+    "https://api.radiocrestin.ro/*",
+    "https://*.radio-crestin.com/*",
+    "https://radio-crestin.com/*",
+    "https://*.live365.com/*",
+    "https://*.shoutcast.com/*",
+    "https://*.icecast.com/*",
+    "https://*.streamguys1.com/*",
+    "https://*.zeno.fm/*"
   ],
   
   "action": {

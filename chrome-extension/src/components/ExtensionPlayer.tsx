@@ -3,7 +3,7 @@ import { Heart, List, Loader2, AlertCircle, Info, User, MapPin, Globe, ArrowLeft
 import { Station } from '../types';
 import { useStations } from '../hooks/useStations';
 import { useFavorites } from '../hooks/useFavorites';
-import { useAudioPlayer } from '../hooks/useAudioPlayer';
+import { useBackgroundAudioPlayer } from '../hooks/useBackgroundAudioPlayer';
 import { StationDisplay } from './StationDisplay';
 import { StationControls } from './StationControls';
 import { VolumeControl } from './VolumeControl';
@@ -15,9 +15,63 @@ export function ExtensionPlayer() {
   const [currentView, setCurrentView] = useState<View>('player');
   const [selectedStation, setSelectedStation] = useState<Station | null>(null);
   const [currentStationIndex, setCurrentStationIndex] = useState(0);
+  const [skipMessage, setSkipMessage] = useState<string | null>(null);
+  const [failedStations, setFailedStations] = useState<Set<string>>(new Set());
   
   const { stations, loading: stationsLoading, error: stationsError } = useStations();
   const { favorites, toggleFavorite, isFavorite } = useFavorites();
+
+  // Reset failed stations when station list changes
+  useEffect(() => {
+    setFailedStations(new Set());
+  }, [stations, favorites]);
+
+  // Handle automatic station skipping
+  const handleStationFailed = (failedStation: Station) => {
+    const currentList = currentView === 'favorites' ? favorites : stations;
+    if (currentList.length <= 1) {
+      // No other stations to skip to
+      return;
+    }
+
+    // Mark this station as failed
+    setFailedStations(prev => new Set(prev).add(failedStation.id));
+
+    // Check if all stations have failed
+    if (failedStations.size >= currentList.length - 1) {
+      setSkipMessage('All stations appear to be offline. Please try again later.');
+      setTimeout(() => setSkipMessage(null), 5000);
+      return;
+    }
+
+    // Find next station that hasn't failed
+    let currentIndex = currentList.findIndex(s => s.id === failedStation.id);
+    let attempts = 0;
+    let nextIndex = currentIndex;
+    
+    do {
+      nextIndex = (nextIndex + 1) % currentList.length;
+      attempts++;
+    } while (failedStations.has(currentList[nextIndex].id) && attempts < currentList.length);
+
+    if (attempts >= currentList.length) {
+      // All stations have failed
+      setSkipMessage('All stations appear to be offline. Please try again later.');
+      setTimeout(() => setSkipMessage(null), 5000);
+      return;
+    }
+
+    // Show skip message
+    setSkipMessage(`Skipping "${failedStation.title}" - trying next station...`);
+    setTimeout(() => setSkipMessage(null), 3000);
+
+    // Auto-skip to next working station
+    setTimeout(() => {
+      setSelectedStation(currentList[nextIndex]);
+      setCurrentStationIndex(nextIndex);
+    }, 1000);
+  };
+
   const {
     isPlaying,
     volume,
@@ -27,7 +81,7 @@ export function ExtensionPlayer() {
     setVolume,
     togglePlay,
     toggleMute,
-  } = useAudioPlayer(selectedStation || undefined);
+  } = useBackgroundAudioPlayer(selectedStation || undefined, handleStationFailed);
 
   // Initialize with first station or first favorite
   useEffect(() => {
@@ -320,7 +374,16 @@ export function ExtensionPlayer() {
           <>
             <StationDisplay station={selectedStation} />
             
-            {audioError && (
+            {skipMessage && (
+              <div className="bg-yellow-500/20 text-yellow-200 p-3 rounded-lg mb-4 text-sm flex items-center gap-2">
+                <div className="animate-spin">
+                  <Loader2 size={16} />
+                </div>
+                {skipMessage}
+              </div>
+            )}
+
+            {audioError && !skipMessage && (
               <div className="bg-red-500/20 text-red-200 p-3 rounded-lg mb-4 text-sm">
                 {audioError}
               </div>
@@ -338,6 +401,8 @@ export function ExtensionPlayer() {
                 isPlaying={isPlaying}
                 onTogglePlay={togglePlay}
                 onChangeStation={handleStationChange}
+                onSkipStation={() => handleStationFailed(selectedStation)}
+                hasError={!!audioError && !skipMessage}
               />
 
               <VolumeControl
