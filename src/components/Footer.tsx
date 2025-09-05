@@ -150,6 +150,15 @@ export function Footer() {
                   Privacy Policy
                 </Link>
                 <span className="text-gray-500">•</span>
+                <a 
+                  href="https://api.whatsapp.com/send/?phone=40750455751&text=Buna+ziua+%5Bradiouri-crestine.ro%5D%0A&type=phone_number&app_absent=0"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-300 hover:text-white transition-colors"
+                >
+                  Contact
+                </a>
+                <span className="text-gray-500">•</span>
                 <p className="text-gray-200">
                   Made with <span className="text-red-500">❤️</span> in Transylvania
                 </p>

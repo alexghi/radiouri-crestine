@@ -5,7 +5,6 @@ import { LoadingDisplay } from './LoadingDisplay';
 import { StationGrid } from './StationGrid';
 import { FloatingPlayer } from './FloatingPlayer';
 import { AudioDebugger } from './AudioDebugger';
-import { SEOHeader } from './SEOHeader';
 import { useAudioPlayer } from '../hooks/useAudioPlayer';
 import { useStations } from '../hooks/useStations';
 import { 
@@ -137,7 +136,11 @@ export function RadioPlayer() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-gray-900 to-black">
-      <SEOHeader />
+      {/* Hidden SEOHeader for semantic HTML structure - not visually displayed */}
+      <div className="sr-only">
+        <h1>Radio Creștin Online - Posturi Radio Creștine Live 24/7</h1>
+        <p>Descoperă cele mai bune radiouri creștine din România și din întreaga lume. Ascultă posturi radio creștine cu muzică creștină, predici inspiraționale și emisiuni spirituale.</p>
+      </div>
       <StationGrid
         stations={stations}
         onSelectStation={handleStationSelect}
