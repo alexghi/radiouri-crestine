@@ -42,8 +42,8 @@ let messageId = 0;
 async function sendMessageToOffscreen(message: any): Promise<any> {
   if (!offscreenReady) {
     await createOffscreenDocument();
-    // Give the offscreen document time to initialize
-    await new Promise(resolve => setTimeout(resolve, 200));
+    // Give the offscreen document time to initialize and load saved state
+    await new Promise(resolve => setTimeout(resolve, 500));
   }
 
   const id = ++messageId;
@@ -144,6 +144,29 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       // Popup might not be open, ignore error
     });
     return;
+  }
+
+  // Storage operations for offscreen document
+  if (message.type === 'SAVE_AUDIO_STATE') {
+    chrome.storage.local.set({
+      lastAudioState: message.state
+    }).then(() => {
+      sendResponse({ success: true });
+    }).catch(error => {
+      console.error('Failed to save audio state:', error);
+      sendResponse({ success: false, error: error.message });
+    });
+    return true;
+  }
+
+  if (message.type === 'GET_AUDIO_STATE') {
+    chrome.storage.local.get(['lastAudioState']).then(result => {
+      sendResponse({ success: true, state: result.lastAudioState });
+    }).catch(error => {
+      console.error('Failed to get audio state:', error);
+      sendResponse({ success: false, error: error.message });
+    });
+    return true;
   }
 
   // Original messages

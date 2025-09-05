@@ -18,6 +18,7 @@ export function ExtensionPlayer() {
   const [skipMessage, setSkipMessage] = useState<string | null>(null);
   const [failedStations, setFailedStations] = useState<Set<string>>(new Set());
   const [resumeMessage, setResumeMessage] = useState<string | null>(null);
+  const [hasInitialSynced, setHasInitialSynced] = useState(false);
   
   const { stations, loading: stationsLoading, error: stationsError } = useStations();
   const { favorites, toggleFavorite, isFavorite } = useFavorites();
@@ -84,18 +85,23 @@ export function ExtensionPlayer() {
     togglePlay,
     toggleMute,
     syncAudioState,
-  } = useBackgroundAudioPlayer(selectedStation || undefined, handleStationFailed);
+  } = useBackgroundAudioPlayer(selectedStation || undefined, handleStationFailed, () => {
+    console.log('Initial sync complete');
+    setHasInitialSynced(true);
+  });
 
   // Initialize with saved station from background or first station/favorite
   useEffect(() => {
     const initializeStation = async () => {
-      if (!selectedStation) {
+      // Only initialize if we don't have a selected station and we have station data
+      if (!selectedStation && stations.length > 0) {
+        console.log('Initializing station... currentBackgroundStation:', currentBackgroundStation);
         // First check if there's a station saved in background
         if (currentBackgroundStation) {
           console.log('Restoring station from background:', currentBackgroundStation.title);
           setSelectedStation(currentBackgroundStation);
           
-          // Show resume message
+          // Show resume message only if session restoration was successful
           setResumeMessage(`Restored "${currentBackgroundStation.title}" from your last session`);
           setTimeout(() => setResumeMessage(null), 4000);
           
@@ -104,6 +110,9 @@ export function ExtensionPlayer() {
           const stationIndex = currentList.findIndex(s => s.id === currentBackgroundStation.id);
           if (stationIndex !== -1) {
             setCurrentStationIndex(stationIndex);
+          } else {
+            // If restored station not found in current list, reset to first station
+            setCurrentStationIndex(0);
           }
         } else {
           // Fallback to first favorite or first station
@@ -118,8 +127,12 @@ export function ExtensionPlayer() {
       }
     };
 
-    initializeStation();
-  }, [stations, favorites, selectedStation, currentBackgroundStation, currentView]);
+    // Only run initialization when stations are loaded, initial sync is complete, and we don't have a selected station yet
+    if (stations.length > 0 && !stationsLoading && hasInitialSynced) {
+      console.log('Conditions met for initialization - stations loaded:', stations.length, 'sync complete:', hasInitialSynced);
+      initializeStation();
+    }
+  }, [stations, favorites, selectedStation, currentBackgroundStation, currentView, stationsLoading, hasInitialSynced]);
 
   const handleStationChange = (direction: 'next' | 'prev') => {
     const currentList = currentView === 'favorites' ? favorites : stations;
@@ -255,7 +268,7 @@ export function ExtensionPlayer() {
             {/* App Icon & Title */}
             <div className="text-center">
               <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-purple-700 rounded-3xl mx-auto mb-6 flex items-center justify-center shadow-2xl">
-                <Heart size={32} className="text-white" fill="currentColor" />
+                <img src="/icons/favicon.png" alt="Radio Crestin" className="w-8 h-8" />
               </div>
               <h3 className="text-2xl font-bold text-white mb-2">Radio Crestin</h3>
               <div className="w-16 h-px bg-gradient-to-r from-transparent via-purple-400 to-transparent mx-auto mb-6"></div>

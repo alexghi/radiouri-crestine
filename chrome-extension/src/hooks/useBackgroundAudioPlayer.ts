@@ -12,7 +12,8 @@ interface AudioState {
 
 export function useBackgroundAudioPlayer(
   currentStation: Station | undefined, 
-  onStationFailed?: (station: Station) => void
+  onStationFailed?: (station: Station) => void,
+  onInitialSyncComplete?: () => void
 ) {
   const [audioState, setAudioState] = useState<AudioState>({
     isPlaying: false,
@@ -42,10 +43,14 @@ export function useBackgroundAudioPlayer(
 
   // Get current audio state from background
   const syncAudioState = useCallback(async () => {
+    console.log('Syncing audio state from background...');
     const response = await sendBackgroundMessage({ type: 'AUDIO_GET_STATE' });
     if (response.success && response.state) {
+      console.log('Audio state synced successfully:', response.state);
       setAudioState(response.state);
       return response.state;
+    } else {
+      console.log('No audio state found or sync failed:', response);
     }
     return null;
   }, [sendBackgroundMessage]);
@@ -61,8 +66,18 @@ export function useBackgroundAudioPlayer(
 
     chrome.runtime.onMessage.addListener(messageListener);
 
-    // Sync state when popup opens
-    syncAudioState();
+    // Sync state when popup opens with a small delay to ensure offscreen is ready
+    const syncWithDelay = async () => {
+      // Wait a bit for offscreen to fully initialize
+      await new Promise(resolve => setTimeout(resolve, 300));
+      await syncAudioState();
+      // Notify that initial sync is complete
+      if (onInitialSyncComplete) {
+        onInitialSyncComplete();
+      }
+    };
+    
+    syncWithDelay();
 
     return () => {
       chrome.runtime.onMessage.removeListener(messageListener);

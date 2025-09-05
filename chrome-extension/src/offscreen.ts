@@ -75,9 +75,34 @@ class BackgroundAudioManager {
       console.error('Audio error:', e);
       this.playPromise = null; // Clear any pending play promise
       this.isTransitioning = false;
+      
+      // Get detailed error information
+      let errorMessage = 'Audio playback failed';
+      if (e.target && (e.target as HTMLAudioElement).error) {
+        const mediaError = (e.target as HTMLAudioElement).error;
+        switch(mediaError.code) {
+          case MediaError.MEDIA_ERR_ABORTED:
+            errorMessage = 'Audio loading was aborted';
+            break;
+          case MediaError.MEDIA_ERR_NETWORK:
+            errorMessage = 'Network error occurred while loading audio';
+            break;
+          case MediaError.MEDIA_ERR_DECODE:
+            errorMessage = 'Audio format not supported or corrupted';
+            break;
+          case MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED:
+            errorMessage = 'Audio source not supported';
+            break;
+          default:
+            errorMessage = `Audio error: ${mediaError.message || 'Unknown error'}`;
+        }
+      } else if (e.type) {
+        errorMessage = `Audio error: ${e.type}`;
+      }
+      
       this.updateState({ 
         isPlaying: false, 
-        error: 'Audio playback failed',
+        error: errorMessage,
         isLoading: false 
       });
     });
@@ -125,8 +150,12 @@ class BackgroundAudioManager {
         lastUpdated: Date.now()
       };
       
-      await chrome.storage.local.set({
-        lastAudioState: stateToSave
+      console.log('Saving audio state to storage:', stateToSave);
+      
+      // Send message to background script to save state
+      chrome.runtime.sendMessage({
+        type: 'SAVE_AUDIO_STATE',
+        state: stateToSave
       });
     } catch (error) {
       console.error('Failed to save audio state to storage:', error);
@@ -135,36 +164,62 @@ class BackgroundAudioManager {
 
   async loadStateFromStorage() {
     try {
-      const result = await chrome.storage.local.get(['lastAudioState']);
-      if (result.lastAudioState) {
-        const savedState = result.lastAudioState;
+      console.log('Loading audio state from storage...');
+      // Request saved state from background script
+      const response = await new Promise((resolve) => {
+        chrome.runtime.sendMessage({ type: 'GET_AUDIO_STATE' }, resolve);
+      });
+      
+      console.log('Storage response:', response);
+      
+      if (response && response.success && response.state) {
+        const savedState = response.state;
         
         // Only restore if the state was saved recently (within 1 hour)
         const oneHour = 60 * 60 * 1000;
         if (Date.now() - savedState.lastUpdated < oneHour) {
           console.log('Restoring audio state from storage:', savedState);
           
+          // Update state without triggering state change broadcasts yet
           this.state = {
             ...this.state,
             currentStation: savedState.currentStation,
             volume: savedState.volume,
             isMuted: savedState.isMuted,
             // Don't restore isPlaying - let user decide to resume
-            isPlaying: false
+            isPlaying: false,
+            error: null,
+            isLoading: false
           };
 
           // Apply volume and mute settings immediately
           this.audioElement.volume = this.state.volume;
           this.audioElement.muted = this.state.isMuted;
 
-          // If there was a playing station, load it (but don't auto-play)
-          if (savedState.currentStation && savedState.isPlaying) {
-            console.log('Restoring station:', savedState.currentStation.title);
-            await this.loadStation(savedState.currentStation);
+          // If there was a station, pre-load it and auto-resume if it was playing
+          if (savedState.currentStation) {
+            console.log('Pre-loading station for session restore:', savedState.currentStation.title);
+            try {
+              // Set loading state but don't broadcast yet
+              this.state.isLoading = true;
+              // Auto-resume if the user was playing when they closed the extension
+              const shouldAutoResume = savedState.isPlaying;
+              await this.loadStation(savedState.currentStation, shouldAutoResume);
+              console.log('Session restoration completed successfully', shouldAutoResume ? '(auto-resumed)' : '(paused)');
+            } catch (error) {
+              console.warn('Failed to pre-load station during session restore:', error);
+              // Clear the station if it fails to load
+              this.state.currentStation = null;
+              this.state.error = null; // Don't show error from session restore
+            } finally {
+              this.state.isLoading = false;
+            }
           }
         } else {
           console.log('Saved audio state is too old, not restoring');
         }
+      } else {
+        console.log('No saved audio state found');
       }
     } catch (error) {
       console.error('Failed to load audio state from storage:', error);
@@ -351,23 +406,27 @@ class BackgroundAudioManager {
         
         let errorMsg = 'Audio failed to load';
         if (e.target?.error) {
-          switch(e.target.error.code) {
-            case e.target.error.MEDIA_ERR_ABORTED:
+          const mediaError = e.target.error;
+          switch(mediaError.code) {
+            case MediaError.MEDIA_ERR_ABORTED:
               errorMsg = 'Media loading aborted';
               break;
-            case e.target.error.MEDIA_ERR_NETWORK:
+            case MediaError.MEDIA_ERR_NETWORK:
               errorMsg = 'Network error while loading media';
               break;
-            case e.target.error.MEDIA_ERR_DECODE:
+            case MediaError.MEDIA_ERR_DECODE:
               errorMsg = 'Media format not supported';
               break;
-            case e.target.error.MEDIA_ERR_SRC_NOT_SUPPORTED:
+            case MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED:
               errorMsg = 'Media source not supported';
               break;
             default:
-              errorMsg = `Audio error: ${e.target.error.message || 'Unknown error'}`;
+              errorMsg = `Audio error: ${mediaError.message || 'Unknown error'}`;
           }
+        } else if (e.type) {
+          errorMsg = `Audio ${e.type} error`;
         }
+        console.error('Audio loading error details:', errorMsg, e);
         reject(new Error(errorMsg));
       };
       
@@ -519,7 +578,7 @@ class BackgroundAudioManager {
     });
   }
 
-  async loadStation(station: Station): Promise<void> {
+  async loadStation(station: Station, shouldAutoResume: boolean = true): Promise<void> {
     const sources = this.getStreamSources(station);
     
     if (sources.length === 0) {
@@ -574,12 +633,13 @@ class BackgroundAudioManager {
           
           this.updateState({ isLoading: false, error: null });
           
-          // If we were playing before, try to resume
-          if (wasPlaying) {
+          // Auto-resume if we were playing before and it's a user-initiated station change
+          if (wasPlaying && shouldAutoResume) {
             try {
+              console.log('Auto-resuming playback for station change:', station.title);
               await this.audioElement.play();
             } catch (playError) {
-              console.warn('Could not auto-resume playback:', playError);
+              console.warn('Could not auto-resume playback after station change:', playError);
               // Don't throw error, just leave it paused
             }
           }
@@ -722,7 +782,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
   switch (message.type) {
     case 'AUDIO_LOAD_STATION':
-      audioManager.loadStation(message.station)
+      // Default to auto-resume unless explicitly told not to
+      const shouldAutoResume = message.shouldAutoResume !== false;
+      audioManager.loadStation(message.station, shouldAutoResume)
         .then(() => respondToBackground({ success: true }))
         .catch(error => respondToBackground({ success: false, error: error.message }));
       break;

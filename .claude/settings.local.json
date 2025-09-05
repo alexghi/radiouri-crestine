@@ -1,7 +1,12 @@
 {
   "permissions": {
     "allow": [
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(cp:*)",
+      "Bash(npm run build:*)",
+      "Bash(./build-extension.sh:*)",
+      "Bash(bash:*)",
+      "Read(//Users/alex/Desktop/**)"
     ],
     "deny": []
   }
