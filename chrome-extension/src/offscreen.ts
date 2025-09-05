@@ -105,11 +105,70 @@ class BackgroundAudioManager {
   private updateState(updates: Partial<AudioState>) {
     this.state = { ...this.state, ...updates };
     
+    // Save current station and playback state to storage
+    this.saveStateToStorage();
+    
     // Notify background script of state changes
     chrome.runtime.sendMessage({
       type: 'AUDIO_STATE_CHANGED',
       state: this.state
     });
+  }
+
+  private async saveStateToStorage() {
+    try {
+      const stateToSave = {
+        currentStation: this.state.currentStation,
+        isPlaying: this.state.isPlaying,
+        volume: this.state.volume,
+        isMuted: this.state.isMuted,
+        lastUpdated: Date.now()
+      };
+      
+      await chrome.storage.local.set({
+        lastAudioState: stateToSave
+      });
+    } catch (error) {
+      console.error('Failed to save audio state to storage:', error);
+    }
+  }
+
+  async loadStateFromStorage() {
+    try {
+      const result = await chrome.storage.local.get(['lastAudioState']);
+      if (result.lastAudioState) {
+        const savedState = result.lastAudioState;
+        
+        // Only restore if the state was saved recently (within 1 hour)
+        const oneHour = 60 * 60 * 1000;
+        if (Date.now() - savedState.lastUpdated < oneHour) {
+          console.log('Restoring audio state from storage:', savedState);
+          
+          this.state = {
+            ...this.state,
+            currentStation: savedState.currentStation,
+            volume: savedState.volume,
+            isMuted: savedState.isMuted,
+            // Don't restore isPlaying - let user decide to resume
+            isPlaying: false
+          };
+
+          // Apply volume and mute settings immediately
+          this.audioElement.volume = this.state.volume;
+          this.audioElement.muted = this.state.isMuted;
+
+          // If there was a playing station, load it (but don't auto-play)
+          if (savedState.currentStation && savedState.isPlaying) {
+            console.log('Restoring station:', savedState.currentStation.title);
+            await this.loadStation(savedState.currentStation);
+          }
+        } else {
+          console.log('Saved audio state is too old, not restoring');
+        }
+      }
+    } catch (error) {
+      console.error('Failed to load audio state from storage:', error);
+    }
   }
 
   private detectStreamType(url: string): 'mp3' | 'hls' | 'other' {
@@ -630,6 +689,13 @@ class BackgroundAudioManager {
 
 // Create global audio manager instance
 const audioManager = new BackgroundAudioManager();
+
+// Initialize the audio manager with saved state
+audioManager.loadStateFromStorage().then(() => {
+  console.log('Audio manager initialized with saved state');
+}).catch(error => {
+  console.error('Failed to initialize audio manager:', error);
+});
 
 // Handle messages from background script
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {

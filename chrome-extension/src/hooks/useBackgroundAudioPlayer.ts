@@ -45,7 +45,9 @@ export function useBackgroundAudioPlayer(
     const response = await sendBackgroundMessage({ type: 'AUDIO_GET_STATE' });
     if (response.success && response.state) {
       setAudioState(response.state);
+      return response.state;
     }
+    return null;
   }, [sendBackgroundMessage]);
 
   // Listen for state changes from background
@@ -210,9 +212,11 @@ export function useBackgroundAudioPlayer(
     isMuted: audioState.isMuted,
     audioError: audioState.error,
     isLoading: audioState.isLoading,
+    currentBackgroundStation: audioState.currentStation,
     setVolume,
     togglePlay,
     toggleMute,
-    setAudioError
+    setAudioError,
+    syncAudioState
   };
 }

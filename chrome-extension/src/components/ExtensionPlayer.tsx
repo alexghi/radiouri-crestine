@@ -17,6 +17,7 @@ export function ExtensionPlayer() {
   const [currentStationIndex, setCurrentStationIndex] = useState(0);
   const [skipMessage, setSkipMessage] = useState<string | null>(null);
   const [failedStations, setFailedStations] = useState<Set<string>>(new Set());
+  const [resumeMessage, setResumeMessage] = useState<string | null>(null);
   
   const { stations, loading: stationsLoading, error: stationsError } = useStations();
   const { favorites, toggleFavorite, isFavorite } = useFavorites();
@@ -78,22 +79,47 @@ export function ExtensionPlayer() {
     isMuted,
     audioError,
     isLoading: audioLoading,
+    currentBackgroundStation,
     setVolume,
     togglePlay,
     toggleMute,
+    syncAudioState,
   } = useBackgroundAudioPlayer(selectedStation || undefined, handleStationFailed);
 
-  // Initialize with first station or first favorite
+  // Initialize with saved station from background or first station/favorite
   useEffect(() => {
-    if (!selectedStation) {
-      if (favorites.length > 0) {
-        setSelectedStation(favorites[0]);
-      } else if (stations.length > 0) {
-        setSelectedStation(stations[0]);
-        setCurrentStationIndex(0);
+    const initializeStation = async () => {
+      if (!selectedStation) {
+        // First check if there's a station saved in background
+        if (currentBackgroundStation) {
+          console.log('Restoring station from background:', currentBackgroundStation.title);
+          setSelectedStation(currentBackgroundStation);
+          
+          // Show resume message
+          setResumeMessage(`Restored "${currentBackgroundStation.title}" from your last session`);
+          setTimeout(() => setResumeMessage(null), 4000);
+          
+          // Find and set the correct index for the restored station
+          const currentList = currentView === 'favorites' ? favorites : stations;
+          const stationIndex = currentList.findIndex(s => s.id === currentBackgroundStation.id);
+          if (stationIndex !== -1) {
+            setCurrentStationIndex(stationIndex);
+          }
+        } else {
+          // Fallback to first favorite or first station
+          if (favorites.length > 0) {
+            setSelectedStation(favorites[0]);
+            setCurrentStationIndex(0);
+          } else if (stations.length > 0) {
+            setSelectedStation(stations[0]);
+            setCurrentStationIndex(0);
+          }
+        }
       }
-    }
-  }, [stations, favorites, selectedStation]);
+    };
+
+    initializeStation();
+  }, [stations, favorites, selectedStation, currentBackgroundStation, currentView]);
 
   const handleStationChange = (direction: 'next' | 'prev') => {
     const currentList = currentView === 'favorites' ? favorites : stations;
@@ -374,6 +400,15 @@ export function ExtensionPlayer() {
           <>
             <StationDisplay station={selectedStation} />
             
+            {resumeMessage && (
+              <div className="bg-green-500/20 text-green-200 p-3 rounded-lg mb-4 text-sm flex items-center gap-2">
+                <div className="text-green-400">
+                  <Info size={16} />
+                </div>
+                {resumeMessage}
+              </div>
+            )}
+
             {skipMessage && (
               <div className="bg-yellow-500/20 text-yellow-200 p-3 rounded-lg mb-4 text-sm flex items-center gap-2">
                 <div className="animate-spin">
