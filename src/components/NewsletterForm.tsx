@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
+import { Link } from 'react-router-dom';
 import { Mail } from 'lucide-react';
 import * as yup from 'yup';
 import { toast } from 'sonner';
@@ -263,6 +264,23 @@ export function Footer() {
                 Made with <span className="text-red-500">❤️</span> in
                 Transylvania
               </p>
+              <div className="flex items-center justify-center gap-2 mt-2 text-sm">
+                <Link 
+                  to="/privacy-policy" 
+                  className="text-gray-300 hover:text-white transition-colors"
+                >
+                  Privacy Policy
+                </Link>
+                <span className="text-gray-500">•</span>
+                <a 
+                  href="https://api.whatsapp.com/send/?phone=40750455751&text=Buna+ziua+%5Bradiouri-crestine.ro%5D%0A&type=phone_number&app_absent=0"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-300 hover:text-white transition-colors"
+                >
+                  Contact
+                </a>
+              </div>
               <p className="text-gray-400 text-sm mt-4">
                 Cuvinte cheie: radio crestin, radiouri crestine, posturi radio,
                 posturi crestine, radio crestin online, radiouri crestine live
