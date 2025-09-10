@@ -1,13 +1,10 @@
 import { useState } from 'react';
-import {
-  GoogleReCaptchaProvider,
-  useGoogleReCaptcha,
-} from 'react-google-recaptcha-v3';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 import { Mail } from 'lucide-react';
 import * as yup from 'yup';
 import { toast } from 'sonner';
 import { newsletterValidationSchema } from './utils/validators.ts';
-import { event } from '../lib/analytics.ts';
+import { trackNewsletterSubscribe } from '../lib/analytics.ts';
 
 const NewsletterForm = () => {
   const [email, setEmail] = useState('');
@@ -63,7 +60,7 @@ const NewsletterForm = () => {
       });
 
       // Execute reCAPTCHA when form is submitted
-      const recaptchaToken = await executeRecaptcha('subscribe_newsletter');
+      const recaptchaToken = await executeRecaptcha('newsletterSubmit');
       console.log('reCAPTCHA token:', recaptchaToken);
 
       const response = await fetch('/api/subscribe-newsletter', {
@@ -74,17 +71,31 @@ const NewsletterForm = () => {
         body: JSON.stringify({
           recaptchaToken: recaptchaToken,
           email: email,
-          action: 'subscribe_newsletter',
         }),
       });
 
-      event({
-        action: 'subscribe_newsletter',
-        category: 'Newsletter',
-        label: email,
-      });
+      // Analytics will be tracked after successful response
 
-      const data = await response.json();
+      let data;
+      const responseText = await response.text();
+      console.log('Raw response:', responseText);
+
+      try {
+        data = JSON.parse(responseText);
+      } catch (parseError) {
+        console.error('JSON parse error:', parseError);
+        console.error('Response text:', responseText);
+        toast.error('Server error. Please try again later.', {
+          style: {
+            background: '#fecaca',
+            color: '#7f1d1d',
+            border: '1px solid #f87171',
+          },
+        });
+        setSubscriptionStatus('error');
+        trackNewsletterSubscribe(false, email);
+        return;
+      }
 
       if (response.ok) {
         toast.success('Thank you for subscribing!', {
@@ -96,15 +107,22 @@ const NewsletterForm = () => {
         });
         setEmail('');
         setSubscriptionStatus('success');
+        trackNewsletterSubscribe(true, email);
       } else {
-        toast.error(data.error || 'Something went wrong. Please try again.', {
-          style: {
-            background: '#fecaca',
-            color: '#7f1d1d',
-            border: '1px solid #f87171',
+        toast.error(
+          data.message ||
+            data.error ||
+            'Something went wrong. Please try again.',
+          {
+            style: {
+              background: '#fecaca',
+              color: '#7f1d1d',
+              border: '1px solid #f87171',
+            },
           },
-        });
+        );
         setSubscriptionStatus('error');
+        trackNewsletterSubscribe(false, email);
       }
     } catch (error) {
       toast.error('An error occurred. Please try again later.', {
@@ -116,6 +134,7 @@ const NewsletterForm = () => {
       });
       console.error('Newsletter submission error:', error);
       setSubscriptionStatus('error');
+      trackNewsletterSubscribe(false, email);
     } finally {
       setLoading(false);
     }
@@ -188,23 +207,32 @@ export function Footer() {
             <div className="grid md:grid-cols-2 gap-8 text-white/80 leading-relaxed">
               <div>
                 <p className="mb-4">
-                  <strong>Radio Creștin</strong> este platforma ta de încredere pentru <strong>radiouri creștine online</strong>. 
-                  Oferim acces gratuit la cele mai bune <strong>posturi radio creștine</strong> din România și din întreaga lume.
+                  <strong>Radio Creștin</strong> este platforma ta de încredere
+                  pentru <strong>radiouri creștine online</strong>. Oferim acces
+                  gratuit la cele mai bune{' '}
+                  <strong>posturi radio creștine</strong> din România și din
+                  întreaga lume.
                 </p>
                 <p className="mb-4">
-                  Fiecare <strong>post radio creștin</strong> din colecția noastră este selectat cu grijă pentru a-ți oferi 
-                  cea mai bună experiență de ascultare a muzicii creștine, predicilor și emisiunilor spirituale.
+                  Fiecare <strong>post radio creștin</strong> din colecția
+                  noastră este selectat cu grijă pentru a-ți oferi cea mai bună
+                  experiență de ascultare a muzicii creștine, predicilor și
+                  emisiunilor spirituale.
                 </p>
               </div>
               <div>
                 <p className="mb-4">
-                  Platforma noastră îți permite să asculți <strong>radio creștin live</strong> 24/7, 
-                  să salvezi <strong>posturile creștine</strong> preferate și să descoperi noi 
-                  <strong>radiouri creștine</strong> care să-ți îmbogățească viața spirituală.
+                  Platforma noastră îți permite să asculți{' '}
+                  <strong>radio creștin live</strong> 24/7, să salvezi{' '}
+                  <strong>posturile creștine</strong> preferate și să descoperi
+                  noi
+                  <strong>radiouri creștine</strong> care să-ți îmbogățească
+                  viața spirituală.
                 </p>
                 <p>
-                  Indiferent dacă preferi muzica creștină contemporană sau tradițională, 
-                  vei găsi <strong>posturi radio</strong> potrivite pentru fiecare moment al zilei.
+                  Indiferent dacă preferi muzica creștină contemporană sau
+                  tradițională, vei găsi <strong>posturi radio</strong>{' '}
+                  potrivite pentru fiecare moment al zilei.
                 </p>
               </div>
             </div>
@@ -222,18 +250,7 @@ export function Footer() {
               </p>
             </div>
 
-            <GoogleReCaptchaProvider
-              reCaptchaKey={import.meta.env.VITE_RECAPTCHA_KEY}
-              useEnterprise={true}
-              scriptProps={{
-                async: true,
-                defer: true,
-                appendTo: 'head',
-                nonce: undefined,
-              }}
-            >
-              <NewsletterForm />
-            </GoogleReCaptchaProvider>
+            <NewsletterForm />
           </div>
 
           <div className="border-t border-white/10 pt-8">
@@ -247,7 +264,8 @@ export function Footer() {
                 Transylvania
               </p>
               <p className="text-gray-400 text-sm mt-4">
-                Cuvinte cheie: radio crestin, radiouri crestine, posturi radio, posturi crestine, radio crestin online, radiouri crestine live
+                Cuvinte cheie: radio crestin, radiouri crestine, posturi radio,
+                posturi crestine, radio crestin online, radiouri crestine live
               </p>
             </div>
           </div>

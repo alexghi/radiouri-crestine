@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
 import { RadioPlayer } from './components/RadioPlayer';
 import { Footer } from './components/Footer';
 import { PrivacyPolicy } from './components/PrivacyPolicy';
@@ -23,25 +24,42 @@ function App() {
   }, []);
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-      </Routes>
-      
-      <Toaster
-        position="top-right"
-        toastOptions={{
-          duration: 4000,
-          style: {
-            borderRadius: '8px',
-            fontSize: '14px',
-            fontWeight: '500',
-          },
-        }}
-        className="sonner-toaster"
-      />
-    </Router>
+    <GoogleReCaptchaProvider
+      reCaptchaKey={import.meta.env.VITE_RECAPTCHA_KEY || ''}
+      useEnterprise={true}
+      scriptProps={{
+        async: true,
+        defer: true,
+        appendTo: 'head',
+        nonce: undefined,
+      }}
+    >
+      <Router>
+        <Routes>
+          <Route
+            path="/"
+            element={<HomePage />}
+          />
+          <Route
+            path="/privacy-policy"
+            element={<PrivacyPolicy />}
+          />
+        </Routes>
+
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            duration: 4000,
+            style: {
+              borderRadius: '8px',
+              fontSize: '14px',
+              fontWeight: '500',
+            },
+          }}
+          className="sonner-toaster"
+        />
+      </Router>
+    </GoogleReCaptchaProvider>
   );
 }
 

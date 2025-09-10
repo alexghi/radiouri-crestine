@@ -124,9 +124,38 @@ async function addToMailchimp(
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     console.log("Function started with method:", req.method);
+    console.log("Environment variables check:", {
+      RECAPTCHA_KEY: !!RECAPTCHA_KEY,
+      MAILCHIMP_API_KEY: !!MAILCHIMP_API_KEY,
+      MAILCHIMP_LIST_ID: !!MAILCHIMP_LIST_ID,
+      MAILCHIMP_DC: !!MAILCHIMP_DC,
+      GOOGLE_CLOUD_PROJECT_ID: !!GOOGLE_CLOUD_PROJECT_ID,
+      GOOGLE_APPLICATION_CREDENTIALS_JSON:
+        !!GOOGLE_APPLICATION_CREDENTIALS_JSON,
+    });
 
     if (req.method !== "POST") {
       return res.status(405).json({ error: "Method not allowed" });
+    }
+
+    // Check for missing environment variables
+    const missingEnvVars = [];
+    if (!RECAPTCHA_KEY) missingEnvVars.push("RECAPTCHA_KEY");
+    if (!MAILCHIMP_API_KEY) missingEnvVars.push("MAILCHIMP_API_KEY");
+    if (!MAILCHIMP_LIST_ID) missingEnvVars.push("MAILCHIMP_LIST_ID");
+    if (!MAILCHIMP_DC) missingEnvVars.push("MAILCHIMP_DC");
+    if (!GOOGLE_CLOUD_PROJECT_ID)
+      missingEnvVars.push("GOOGLE_CLOUD_PROJECT_ID");
+    if (!GOOGLE_APPLICATION_CREDENTIALS_JSON)
+      missingEnvVars.push("GOOGLE_APPLICATION_CREDENTIALS_JSON");
+
+    if (missingEnvVars.length > 0) {
+      console.error("Missing environment variables:", missingEnvVars);
+      return res.status(500).json({
+        success: false,
+        error: "Server configuration error",
+        details: `Missing environment variables: ${missingEnvVars.join(", ")}`,
+      });
     }
 
     try {
@@ -149,7 +178,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
       const recaptchaScore = await createAssessment({
         token: recaptchaToken,
-        recaptchaAction: "subscribe_newsletter",
+        recaptchaAction: "newsletterSubmit",
       });
 
       if (
