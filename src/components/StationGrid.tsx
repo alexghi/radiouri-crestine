@@ -1,7 +1,7 @@
 import { Station } from '../types';
 import { StationCard } from './StationCard';
 import { FavoriteStations } from './FavoriteStations';
-import { Search } from 'lucide-react';
+import { Search, Chrome, ExternalLink } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useFavorites } from '../hooks/useFavorites';
 import { trackSearch } from '../lib/analytics';
@@ -40,7 +40,15 @@ export function StationGrid({ stations, onSelectStation, selectedStation }: Stat
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
               <h1 className="text-3xl font-bold text-white mb-2">Radiouri Creștine Online</h1>
-              <p className="text-white/70">Ascultă muzică creștină și adaugă la favorite stațiile preferate</p>
+              <p className="text-white/70 mb-3">Ascultă muzică creștină și adaugă la favorite stațiile preferate</p>
+              <a
+                href="/extension"
+                className="inline-flex items-center gap-2 text-blue-300 hover:text-blue-200 font-medium text-sm transition-colors"
+              >
+                <Chrome className="w-4 h-4" />
+                Browser Extension
+                <ExternalLink className="w-3 h-3" />
+              </a>
             </div>
             <div className="relative w-full sm:w-72">
               <input

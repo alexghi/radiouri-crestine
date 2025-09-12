@@ -3,6 +3,7 @@ import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
 import { RadioPlayer } from './components/RadioPlayer';
 import { Footer } from './components/Footer';
 import { PrivacyPolicy } from './components/PrivacyPolicy';
+import { ExtensionShowcase } from './components/ExtensionShowcase';
 import { Toaster } from 'sonner';
 import { useEffect } from 'react';
 import { initGA, pageview } from './lib/analytics.ts';
@@ -43,6 +44,10 @@ function App() {
           <Route
             path="/privacy-policy"
             element={<PrivacyPolicy />}
+          />
+          <Route
+            path="/extension"
+            element={<ExtensionShowcase />}
           />
         </Routes>
 
